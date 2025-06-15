@@ -1,4 +1,0 @@
-repository "Phantom-Calls/Phantom-Calls@18967083410058@cloud"
-  path "/"
-    br "/main"
-    co "/main"
