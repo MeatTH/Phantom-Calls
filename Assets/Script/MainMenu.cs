@@ -7,7 +7,6 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Selectstory"); // name Scene 
     }
-
     public void OnExitButtonClicked()
     {
         Application.Quit();
