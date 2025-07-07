@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: f2139a7fc6ff59e429c562a768653adf
+guid: 1bdd9fe67226deb4b8f31786d10fc9ad
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3358955090562587745
-    second: Button_Sound_On_0
-  - first:
-      213: -5874380317049159582
-    second: Button_Sound_On_1
+      213: 4611040791943824151
+    second: Button_Exit_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -116,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Sound_On_0
+      name: Button_Exit_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 107
-        height: 76
+        width: 106
+        height: 122
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 16c197dbbd76d9e20800000000000000
-      internalID: 3358955090562587745
+      spriteID: 713c5a08b25bdff30800000000000000
+      internalID: 4611040791943824151
       vertices: []
       indices: 
       edges: []
@@ -141,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 2233a5e0a3e944944b7a2fc5f0016a68
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -151,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Button_Sound_On_0: 3358955090562587745
-      Button_Sound_On_1: -5874380317049159582
+      Button_Exit_0: 4611040791943824151
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
