@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: d8bcd1a82d1da924b9835625dfe839ad
+guid: 18eab934637a259478780383befae612
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8763607893947751756
-    second: Button_Bar_0
-  - first:
-      213: -3206024001634072018
-    second: Button_Bar_1
-  - first:
-      213: 1985637420690346839
-    second: Button_Bar_2
+      213: -4803264286856278175
+    second: Chat_Text_Frame1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Bar_0
+      name: Chat_Text_Frame1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 122
-        height: 88
+        width: 554
+        height: 126
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4b26f625d09616680800000000000000
-      internalID: -8763607893947751756
+      spriteID: 16f8c937490675db0800000000000000
+      internalID: -4803264286856278175
       vertices: []
       indices: 
       edges: []
@@ -144,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fda7e5bac3d75374994292f8bb399061
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -154,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Button_Bar_0: -8763607893947751756
-      Button_Bar_1: -3206024001634072018
-      Button_Bar_2: 1985637420690346839
+      Chat_Text_Frame1_0: -4803264286856278175
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
