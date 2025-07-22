@@ -15,6 +15,13 @@ public class DialogueManager_Test1 : MonoBehaviour
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
 
+    [Header("Continue UI")]
+    [SerializeField] private GameObject continueButton;
+
+    [Header("Ink JSON")]
+    [SerializeField] private TextAsset inkJSON;
+
+
     private Story currentStory;
 
     private bool dialogueIsPlaying;
@@ -38,9 +45,10 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     private void Start()
     {
+        //ContinueStory();
         //dialogueIsPlaying = true;
-        dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
+        //dialogueIsPlaying = false;
+        //dialoguePanel.SetActive(false);
 
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
@@ -48,6 +56,11 @@ public class DialogueManager_Test1 : MonoBehaviour
         {
             choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
             index++;
+        }
+
+        if (inkJSON != null)
+        {
+            EnterDialogueMode(inkJSON);
         }
     }
 
@@ -74,6 +87,7 @@ public class DialogueManager_Test1 : MonoBehaviour
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
+        Debug.Log("dialoguePanel.SetActive(true)");
 
         ContinueStory();
     }
@@ -101,9 +115,17 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     private void DisplayChoices()
     {
-        List<Choice> currentChoices = currentStory.currentChoices;
 
-        if(currentChoices.Count > choices.Length)
+        List<Choice> currentChoices = currentStory.currentChoices;
+        if (currentChoices.Count > 0)
+        {
+            continueButton.SetActive(false);
+        }
+        else
+        {
+            continueButton.SetActive(true);
+        }
+        if (currentChoices.Count > choices.Length)
         {
             Debug.LogError("Num of Choice: " + currentChoices.Count);
         }

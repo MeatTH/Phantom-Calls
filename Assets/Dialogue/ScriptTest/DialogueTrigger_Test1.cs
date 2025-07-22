@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DialogueTrigger_Test1 : MonoBehaviour
 {
     [Header("Visual")]
-    [SerializeField] private GameObject visual;
+    [SerializeField] private GameObject chooseStoryButton;
 
     [Header("Ink JSON")]
     [SerializeField] private TextAsset inkJSON;
@@ -26,6 +27,8 @@ public class DialogueTrigger_Test1 : MonoBehaviour
     }
     public void TriggerDialogue()
     {
+        chooseStoryButton.SetActive(false);
         DialogueManager_Test1.GetInstance().EnterDialogueMode(inkJSON);
+        //SceneManager.LoadScene("StoryScene");
     }
 }
