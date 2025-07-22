@@ -6,7 +6,19 @@ public class MenuManager : MonoBehaviour
     public void OnStoryButtonClicked(int storyIndex)
     {
         StoryLoader.selectedStoryIndex = storyIndex;
-        SceneManager.LoadScene("Ingame");
+        if(storyIndex == 0)
+        {
+            SceneManager.LoadScene("Story1");
+        }
+        else if(storyIndex == 1)
+        {
+            SceneManager.LoadScene("Story2");
+        }
+        else
+        {
+            SceneManager.LoadScene("Story3");
+        }
+        
     }
 
     public void OnRandomStoryClicked()
