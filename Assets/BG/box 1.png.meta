@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: f2139a7fc6ff59e429c562a768653adf
+guid: ef85e92f599c43648aeea4c1efb93e82
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3358955090562587745
-    second: Button_Sound_On_0
-  - first:
-      213: -5874380317049159582
-    second: Button_Sound_On_1
+      213: 284976822226269212
+    second: box 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -54,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 150
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -76,7 +73,7 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 0
+    resizeAlgorithm: 1
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -116,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Sound_On_0
+      name: box 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 107
-        height: 76
+        width: 925
+        height: 1540
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 16c197dbbd76d9e20800000000000000
-      internalID: 3358955090562587745
+      spriteID: c143402f8e074f300800000000000000
+      internalID: 284976822226269212
       vertices: []
       indices: 
       edges: []
@@ -141,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 2233a5e0a3e944944b7a2fc5f0016a68
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -151,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Button_Sound_On_0: 3358955090562587745
-      Button_Sound_On_1: -5874380317049159582
+      box 1_0: 284976822226269212
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

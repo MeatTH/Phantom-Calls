@@ -25,7 +25,7 @@ public class MenuManager : MonoBehaviour
     {
         int randomIndex = Random.Range(0, 3); // 0=Story1, 1=Story2, 2=Story3
         StoryLoader.selectedStoryIndex = randomIndex;
-        SceneManager.LoadScene("Ingame");
+        //SceneManager.LoadScene("Ingame");
     }
 }
 
