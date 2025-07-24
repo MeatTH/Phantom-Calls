@@ -1491,52 +1491,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169512839}
   m_CullTransparentMesh: 1
---- !u!1 &192091350
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 192091351}
-  - component: {fileID: 192091352}
-  m_Layer: 0
-  m_Name: Trigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &192091351
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192091350}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 717785050}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &192091352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192091350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7836e71ef6d651418adfc7d3fe7d0d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chooseStoryButton: {fileID: 0}
-  inkJSON: {fileID: 4900000, guid: 52c2d26b13489544c9609160425eaeca, type: 3}
 --- !u!1 &232911142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1844,7 +1798,11 @@ MonoBehaviour:
   - {fileID: 72833624}
   - {fileID: 1378858728}
   continueButton: {fileID: 388877682}
-  inkJSON: {fileID: 4900000, guid: 762d9c50a26173d4ab2511c96f5169c0, type: 3}
+  inkJSON:
+  - {fileID: 4900000, guid: 52c2d26b13489544c9609160425eaeca, type: 3}
+  - {fileID: 4900000, guid: 762d9c50a26173d4ab2511c96f5169c0, type: 3}
+  - {fileID: 4900000, guid: 6e646ab3c0f93834da59a1e21f8efed4, type: 3}
+  - {fileID: 4900000, guid: fb7ce02ff53f8fd4cb22be2d2319119d, type: 3}
   chatPanel: {fileID: 1212935978}
 --- !u!1 &322607073
 GameObject:
@@ -3996,7 +3954,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 320610167}
-  - {fileID: 192091351}
   - {fileID: 1886086634}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

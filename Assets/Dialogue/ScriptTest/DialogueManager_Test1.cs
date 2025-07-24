@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -19,7 +19,7 @@ public class DialogueManager_Test1 : MonoBehaviour
     [SerializeField] private GameObject continueButton;
 
     [Header("Ink JSON")]
-    [SerializeField] private TextAsset inkJSON;
+    [SerializeField] private TextAsset[] inkJSON;
 
     [Header("Custom UI Panels")]
     [SerializeField] private GameObject chatPanel;
@@ -27,6 +27,7 @@ public class DialogueManager_Test1 : MonoBehaviour
 
 
     private Story currentStory;
+    private bool waitingForChatToFinish = false;
 
     private bool dialogueIsPlaying;
     //private bool dialogueIsPlaying { get; private set; }
@@ -62,9 +63,9 @@ public class DialogueManager_Test1 : MonoBehaviour
             index++;
         }
 
-        if (inkJSON != null)
+        if (inkJSON != null && inkJSON.Length > 0)
         {
-            EnterDialogueMode(inkJSON);
+            EnterDialogueMode(inkJSON[0]);
         }
     }
 
@@ -101,15 +102,19 @@ public class DialogueManager_Test1 : MonoBehaviour
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
 
-        ContinueStory();
+        //ContinueStory();
     }
 
     public void ContinueStory()
     {
+        if (waitingForChatToFinish) return;
+
         if (currentStory.canContinue)
         {
-            dialogueText.text = currentStory.Continue();
-
+            //dialogueText.text = currentStory.Continue();
+            string nextLine = currentStory.Continue();
+            Debug.Log("Ink line: " + nextLine); 
+            dialogueText.text = nextLine;
             foreach (string tag in currentStory.currentTags)
             {
                 HandleTag(tag);
@@ -170,10 +175,17 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     private void HandleTag(string tag)
     {
+        if (tag.StartsWith("load_ink:"))
+        {
+            string inkName = tag.Substring("load_ink:".Length);
+            LoadNewInkStory(inkName);
+            return;
+        }
         switch (tag)
         {
             case "Show_Chat2-1":
                 chatPanel.SetActive(true);
+                waitingForChatToFinish = true;
                 break;
 
             case "hide_chat":
@@ -186,5 +198,35 @@ public class DialogueManager_Test1 : MonoBehaviour
                 break;
         }
     }
+    public void OnChatFinished()
+    {
+        waitingForChatToFinish = false;
+        ContinueStory(); // ✨ ไปต่อเนื้อเรื่องทันที
+    }
+
+    public void LoadNewInkStory(string inkName)
+    {
+        TextAsset selectedInk = null;
+
+        foreach (TextAsset ink in inkJSON)
+        {
+            if (ink.name == inkName) // ต้องตั้งชื่อไฟล์ให้ตรง เช่น Scene2-1
+            {
+                selectedInk = ink;
+                break;
+            }
+        }
+
+        if (selectedInk == null)
+        {
+            Debug.LogError("Ink file not found: " + inkName);
+            return;
+        }
+        currentStory = new Story(selectedInk.text);
+        dialogueIsPlaying = true;
+        dialoguePanel.SetActive(true);
+        ContinueStory();
+    }
+
 
 }

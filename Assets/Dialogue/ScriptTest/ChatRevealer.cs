@@ -36,9 +36,10 @@ public class ChatRevealer : MonoBehaviour
         }
         else
         {
+            Debug.Log("Chat finished, calling DialogueManager...");
             chatPanel.SetActive(false);
-
-            DialogueManager_Test1.GetInstance().ContinueStory();
+            DialogueManager_Test1.GetInstance().OnChatFinished();
+            //DialogueManager_Test1.GetInstance().ContinueStory();
         }
     }
    
