@@ -21,6 +21,10 @@ public class DialogueManager_Test1 : MonoBehaviour
     [Header("Ink JSON")]
     [SerializeField] private TextAsset inkJSON;
 
+    [Header("Custom UI Panels")]
+    [SerializeField] private GameObject chatPanel;
+
+
 
     private Story currentStory;
 
@@ -105,6 +109,12 @@ public class DialogueManager_Test1 : MonoBehaviour
         if (currentStory.canContinue)
         {
             dialogueText.text = currentStory.Continue();
+
+            foreach (string tag in currentStory.currentTags)
+            {
+                HandleTag(tag);
+            }
+
             DisplayChoices();
         }
         else
@@ -157,4 +167,24 @@ public class DialogueManager_Test1 : MonoBehaviour
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
     }
+
+    private void HandleTag(string tag)
+    {
+        switch (tag)
+        {
+            case "Show_Chat2-1":
+                chatPanel.SetActive(true);
+                break;
+
+            case "hide_chat":
+                chatPanel.SetActive(false);
+                break;
+
+            default:
+                Debug.Log("Unhandled tag: " + tag);
+                chatPanel.SetActive(false);
+                break;
+        }
+    }
+
 }
