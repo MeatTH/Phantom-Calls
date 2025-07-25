@@ -12,6 +12,7 @@ public class DialogueManager_Test1 : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
 
     [Header("Choice UI")]
+    [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
 
@@ -20,11 +21,23 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     [Header("Ink JSON")]
     [SerializeField] private TextAsset[] inkJSON;
+    private Coroutine typingCoroutine;
+    private bool isTyping = false;
+    [SerializeField] private float typingSpeed = 0.05f;
+
+    [System.Serializable]
+    public class NamedPanel
+    {
+        public string name;
+        public GameObject panel;
+    }
 
     [Header("Custom UI Panels")]
-    [SerializeField] private GameObject chatPanel;
+    [SerializeField] private List<NamedPanel> customPanels;
 
+    private Dictionary<string, GameObject> panelDict;
 
+    private string pendingInkToLoad = null;
 
     private Story currentStory;
     private bool waitingForChatToFinish = false;
@@ -54,19 +67,30 @@ public class DialogueManager_Test1 : MonoBehaviour
         //dialogueIsPlaying = true;
         //dialogueIsPlaying = false;
         //dialoguePanel.SetActive(false);
+        choicePanel.SetActive(false);
 
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
         foreach (GameObject choice in choices)
         {
             choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
+            choice.SetActive(false);
             index++;
+        }
+
+        panelDict = new Dictionary<string, GameObject>();
+        foreach (NamedPanel p in customPanels)
+        {
+            if (!panelDict.ContainsKey(p.name))
+                panelDict.Add(p.name, p.panel);
         }
 
         if (inkJSON != null && inkJSON.Length > 0)
         {
             EnterDialogueMode(inkJSON[0]);
         }
+
+
     }
 
 
@@ -112,15 +136,21 @@ public class DialogueManager_Test1 : MonoBehaviour
         if (currentStory.canContinue)
         {
             //dialogueText.text = currentStory.Continue();
-            string nextLine = currentStory.Continue();
-            Debug.Log("Ink line: " + nextLine); 
-            dialogueText.text = nextLine;
+            string nextLine = currentStory.Continue().Trim();
+            Debug.Log("Ink line: " + nextLine);
+
             foreach (string tag in currentStory.currentTags)
             {
                 HandleTag(tag);
             }
+            
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+            typingCoroutine = StartCoroutine(TypeText(nextLine));
 
-            DisplayChoices();
+            //DisplayChoices();
         }
         else
         {
@@ -132,6 +162,7 @@ public class DialogueManager_Test1 : MonoBehaviour
     {
 
         List<Choice> currentChoices = currentStory.currentChoices;
+
         if (currentChoices.Count > 0)
         {
             continueButton.SetActive(false);
@@ -148,12 +179,14 @@ public class DialogueManager_Test1 : MonoBehaviour
         int index = 0;
         foreach(Choice choice in currentChoices)
         {
+            choicePanel.SetActive(true);
             choices[index].gameObject.SetActive(true);
             choicesText[index].text = choice.text;
             index++;
         }
         for (int i = index; i < choices.Length; i++)
         {
+            choicePanel.SetActive(false);
             choices[i].gameObject.SetActive(false);
         }
 
@@ -170,47 +203,92 @@ public class DialogueManager_Test1 : MonoBehaviour
     public void MakeChoice(int choiceIndex)
     {
         currentStory.ChooseChoiceIndex(choiceIndex);
+
+        foreach (GameObject choice in choices)
+        {
+            choice.SetActive(false);
+            choicePanel.SetActive(false);
+        }
+
+        
+
+        StartCoroutine(ContinueAfterFrame());
+    }
+
+    private IEnumerator ContinueAfterFrame()
+    {
+        yield return null;
+        while (!currentStory.canContinue && currentStory.currentChoices.Count == 0)
+        {
+            yield return null;
+        }
+
         ContinueStory();
     }
+
 
     private void HandleTag(string tag)
     {
         if (tag.StartsWith("load_ink:"))
         {
-            string inkName = tag.Substring("load_ink:".Length);
-            LoadNewInkStory(inkName);
+            string inkName = tag.Substring("load_ink:".Length).Trim();
+
+            if (pendingInkToLoad != inkName)
+            {
+                pendingInkToLoad = inkName;
+                Debug.Log("Opened Scene (pending load): " + inkName);
+            }
             return;
         }
-        switch (tag)
+
+        if (tag.StartsWith("show_panel:"))
         {
-            case "Show_Chat2-1":
-                chatPanel.SetActive(true);
-                waitingForChatToFinish = true;
-                break;
+            string panelName = tag.Substring("show_panel:".Length);
+            if (panelDict.TryGetValue(panelName, out GameObject panel))
+            {
+                panel.SetActive(true);
+                Debug.Log("Opened panel: " + panelName);
 
-            case "hide_chat":
-                chatPanel.SetActive(false);
-                break;
-
-            default:
-                Debug.Log("Unhandled tag: " + tag);
-                chatPanel.SetActive(false);
-                break;
+                if (panelName.StartsWith("Chat"))
+                {
+                    waitingForChatToFinish = true;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No panel found: " + panelName);
+            }
+            return;
         }
+
+        if (tag.StartsWith("hide_panel:"))
+        {
+            string panelName = tag.Substring("hide_panel:".Length);
+            if (panelDict.TryGetValue(panelName, out GameObject panel))
+            {
+                panel.SetActive(false);
+                Debug.Log("Closed panel: " + panelName);
+            }
+            return;
+        }
+
+        Debug.Log("Unhandled tag: " + tag);
     }
+
     public void OnChatFinished()
     {
         waitingForChatToFinish = false;
-        ContinueStory(); // ✨ ไปต่อเนื้อเรื่องทันที
+        ContinueStory(); 
     }
 
     public void LoadNewInkStory(string inkName)
     {
+        Debug.Log("LoadNewInkStory CALLED: " + inkName);
         TextAsset selectedInk = null;
 
         foreach (TextAsset ink in inkJSON)
         {
-            if (ink.name == inkName) // ต้องตั้งชื่อไฟล์ให้ตรง เช่น Scene2-1
+            if (ink.name == inkName) 
             {
                 selectedInk = ink;
                 break;
@@ -228,5 +306,27 @@ public class DialogueManager_Test1 : MonoBehaviour
         ContinueStory();
     }
 
+    private IEnumerator TypeText(string text)
+    {
+        isTyping = true;
+        dialogueText.text = "";
+
+        foreach (char letter in text.ToCharArray())
+        {
+            dialogueText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        isTyping = false;
+        DisplayChoices();
+
+        if (!string.IsNullOrEmpty(pendingInkToLoad))
+        {
+            string inkToLoad = pendingInkToLoad;
+            pendingInkToLoad = null;
+            yield return null; // รอ 1 frame ให้ layout stable ก่อนโหลดใหม่
+            LoadNewInkStory(inkToLoad);
+        }
+    }
 
 }
