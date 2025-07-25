@@ -165,11 +165,14 @@ public class DialogueManager_Test1 : MonoBehaviour
 
         if (currentChoices.Count > 0)
         {
+            choicePanel.SetActive(true);
             continueButton.SetActive(false);
         }
         else
         {
+            choicePanel.SetActive(false);
             continueButton.SetActive(true);
+            return;
         }
         if (currentChoices.Count > choices.Length)
         {
@@ -179,17 +182,16 @@ public class DialogueManager_Test1 : MonoBehaviour
         int index = 0;
         foreach(Choice choice in currentChoices)
         {
-            choicePanel.SetActive(true);
             choices[index].gameObject.SetActive(true);
             choicesText[index].text = choice.text;
             index++;
         }
         for (int i = index; i < choices.Length; i++)
         {
-            choicePanel.SetActive(false);
+            //choicePanel.SetActive(false);
             choices[i].gameObject.SetActive(false);
         }
-
+        
         StartCoroutine(SelectFirstChoice());
     }
 
@@ -207,11 +209,10 @@ public class DialogueManager_Test1 : MonoBehaviour
         foreach (GameObject choice in choices)
         {
             choice.SetActive(false);
-            choicePanel.SetActive(false);
+            
         }
-
-        
-
+        choicePanel.SetActive(false);
+       
         StartCoroutine(ContinueAfterFrame());
     }
 
