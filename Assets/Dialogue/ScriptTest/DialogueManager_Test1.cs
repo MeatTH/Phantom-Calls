@@ -253,7 +253,7 @@ public class DialogueManager_Test1 : MonoBehaviour
                 if (panelName.StartsWith("Chat"))
                 {
                     waitingForChatToFinish = true;
-                }
+                } 
             }
             else
             {
@@ -325,7 +325,7 @@ public class DialogueManager_Test1 : MonoBehaviour
         {
             string inkToLoad = pendingInkToLoad;
             pendingInkToLoad = null;
-            yield return null; // รอ 1 frame ให้ layout stable ก่อนโหลดใหม่
+            yield return null; 
             LoadNewInkStory(inkToLoad);
         }
     }
