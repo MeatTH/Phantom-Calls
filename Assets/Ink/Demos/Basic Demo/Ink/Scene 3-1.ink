@@ -3,12 +3,27 @@
 จนเวลาได้ล่วงเลยมาถึงช่วงบ่าย
 เสียงโทรเข้าก็ได้ดังทำลายบรรยากาศที่เงียบสงบ
 คุณนึกขึ้นได้ว่ามีของจะมาส่ง จึงหยิบมือถือขึ้นมาเพื่อที่จะรับโทรศัพท์
+# hide_panel:LivingRoom
 
-->call
+-> show_callin
 
+== show_callin ==
+# show_panel:PhoneCallIn
+...
+# hide_panel:PhoneCallIn
+
+-> call
+-->END
 == call ==
+
+# show_panel:PhoneCalling
+
+
 สวัสดีครับ มีพัสดุมาส่งครับ กรุณาออกมารับด้วยครับ #speaker:คนส่งของ #layout:left
  * [ค่ะ กำลังไปรับ]
+
+# hide_panel:PhoneCalling
+
 คุณเดินไปที่ประตูหน้าบ้าน และเปิดประตูเพื่อที่จะเซ็นชื่อรับของ
 
  -> livingroom
