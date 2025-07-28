@@ -1280,8 +1280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuMusic: {fileID: 8300000, guid: 43bcc3d7e0b8baa4f89e0c9ccbc8acf1, type: 3}
-  gameMusic: {fileID: 0}
-  gameSceneName: Gameplay
+  scenesToStopMusic:
+  - Story1
 --- !u!4 &833042195
 Transform:
   m_ObjectHideFlags: 0
