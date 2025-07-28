@@ -142,6 +142,7 @@ public class DialogueManager_Test1 : MonoBehaviour
             foreach (string tag in currentStory.currentTags)
             {
                 HandleTag(tag);
+                SoundManager_Test1.instance.HandleSoundTag(tag);
             }
             
             if (typingCoroutine != null)
@@ -271,6 +272,10 @@ public class DialogueManager_Test1 : MonoBehaviour
                 Debug.Log("Closed panel: " + panelName);
             }
             return;
+        }
+        if (SoundManager_Test1.instance != null)
+        {
+            SoundManager_Test1.instance.HandleSoundTag(tag);
         }
 
         Debug.Log("Unhandled tag: " + tag);
