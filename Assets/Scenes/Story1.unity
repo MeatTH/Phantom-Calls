@@ -2006,8 +2006,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030518, y: 25}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 630, y: 518.587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &196971138
 MonoBehaviour:
@@ -2029,10 +2029,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text
+  m_text: "\u0E20\u0E32\u0E22\u0E43\u0E19\u0E40\u0E22\u0E47\u0E19\u0E27\u0E31\u0E19\u0E19\u0E31\u0E49\u0E19\u0E04\u0E38\u0E13\u0E01\u0E47\u0E44\u0E14\u0E49\u0E25\u0E07\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E1B\u0E23\u0E30\u0E08\u0E33\u0E27\u0E31\u0E19\n\u0E16\u0E36\u0E07\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E07\u0E23\u0E32\u0E27\u0E17\u0E35\u0E48\u0E40\u0E01\u0E34\u0E14\u0E02\u0E36\u0E49\u0E19\u0E41\u0E25\u0E30\n\u0E19\u0E33\u0E1E\u0E31\u0E2A\u0E14\u0E38\u0E44\u0E1B\u0E43\u0E2B\u0E49\u0E15\u0E33\u0E23\u0E27\u0E08\u0E44\u0E14\u0E49\u0E15\u0E23\u0E27\u0E08\u0E2A\u0E2D\u0E1A
+    \n\u0E44\u0E21\u0E48\u0E01\u0E35\u0E48\u0E27\u0E31\u0E19\u0E15\u0E48\u0E2D\u0E21\u0E32\u0E15\u0E33\u0E23\u0E27\u0E08\u0E01\u0E47\u0E44\u0E14\u0E49\u0E15\u0E34\u0E14\u0E15\u0E48\u0E2D\u0E04\u0E38\u0E13\u0E01\u0E25\u0E31\u0E1A\n\u0E41\u0E25\u0E30\u0E44\u0E14\u0E49\u0E1A\u0E2D\u0E01\u0E16\u0E36\u0E07\u0E2A\u0E34\u0E48\u0E07\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E01\u0E25\u0E48\u0E2D\u0E07\u0E1E\u0E31\u0E2A\u0E14\u0E38\u0E19\u0E31\u0E49\u0E19\n\u0E27\u0E48\u0E32\u0E41\u0E17\u0E49\u0E08\u0E23\u0E34\u0E07\u0E41\u0E25\u0E49\u0E27\u0E21\u0E31\u0E19\u0E01\u0E47\u0E40\u0E1B\u0E47\u0E19\u0E41\u0E04\u0E48\u0E41\u0E1B\u0E49\u0E07"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
+  m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2575,8 +2576,8 @@ MonoBehaviour:
     panel: {fileID: 1616816622}
   - name: Box
     panel: {fileID: 2146021818}
-  - name: 
-    panel: {fileID: 0}
+  - name: Powder
+    panel: {fileID: 1043352407}
 --- !u!1 &322607073
 GameObject:
   m_ObjectHideFlags: 0
@@ -2675,6 +2676,7 @@ RectTransform:
   - {fileID: 164914449}
   - {fileID: 683518216}
   - {fileID: 2146021821}
+  - {fileID: 1043352410}
   - {fileID: 1788825724}
   - {fileID: 1616816625}
   - {fileID: 2018405773}
@@ -3193,10 +3195,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press to play again
+  m_text: "\u0E01\u0E14\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E40\u0E25\u0E48\u0E19\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
+  m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4513,10 +4515,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press to play again
+  m_text: "\u0E01\u0E14\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E40\u0E25\u0E48\u0E19\u0E2D\u0E35\u0E01\u0E04\u0E23\u0E31\u0E49\u0E07"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
+  m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8158,6 +8160,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042575877}
   m_CullTransparentMesh: 1
+--- !u!1 &1043352407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1043352410}
+  - component: {fileID: 1043352409}
+  - component: {fileID: 1043352408}
+  m_Layer: 5
+  m_Name: BG_Powder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1043352408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043352407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 6943726980769665066, guid: 9264863287734cc4bb7a7d97b4a53330, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1043352409
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043352407}
+  m_CullTransparentMesh: 1
+--- !u!224 &1043352410
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043352407}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 322607077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1048942271
 GameObject:
   m_ObjectHideFlags: 0
@@ -8891,8 +8968,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030518, y: 25}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000019074, y: 0.000010014}
+  m_SizeDelta: {x: 630, y: 518.587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257612013
 MonoBehaviour:
@@ -8914,10 +8991,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text
+  m_text: "\u0E04\u0E38\u0E13\u0E44\u0E14\u0E49\u0E25\u0E07\u0E1A\u0E31\u0E19\u0E17\u0E36\u0E01\u0E1B\u0E23\u0E30\u0E08\u0E33\u0E27\u0E31\u0E19\u0E40\u0E2D\u0E32\u0E44\u0E27\u0E49
+    \n\u0E15\u0E33\u0E23\u0E27\u0E08\u0E1A\u0E2D\u0E01\u0E01\u0E31\u0E1A\u0E04\u0E38\u0E13\u0E27\u0E48\u0E32\n\u0E04\u0E07\u0E44\u0E21\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E0A\u0E48\u0E27\u0E22\u0E2D\u0E30\u0E44\u0E23\u0E44\u0E14\u0E49\u0E21\u0E32\u0E01
+    \n\u0E41\u0E25\u0E30 \u0E22\u0E31\u0E07\u0E1A\u0E2D\u0E01\u0E2D\u0E35\u0E01\u0E14\u0E49\u0E27\u0E22\u0E27\u0E48\u0E32\u0E04\u0E38\u0E13\u0E42\u0E0A\u0E04\u0E14\u0E35\n\u0E17\u0E35\u0E48\u0E40\u0E2A\u0E35\u0E22\u0E40\u0E07\u0E34\u0E19\u0E44\u0E1B\u0E41\u0E04\u0E48\u0E2A\u0E48\u0E27\u0E19\u0E2B\u0E19\u0E36\u0E48\u0E07
+    \n\u0E16\u0E49\u0E32\u0E2B\u0E32\u0E01\u0E21\u0E34\u0E08\u0E09\u0E32\u0E0A\u0E35\u0E1E\u0E43\u0E0A\u0E49\u0E27\u0E34\u0E18\u0E35\u0E01\u0E32\u0E23\u0E2D\u0E37\u0E48\u0E19\n\u0E17\u0E35\u0E48\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16\u0E40\u0E02\u0E49\u0E32\u0E16\u0E36\u0E07\u0E41\u0E2D\u0E1E\u0E18\u0E19\u0E32\u0E04\u0E32\u0E23\u0E04\u0E38\u0E13\u0E44\u0E14\u0E49\n\u0E04\u0E38\u0E13\u0E2D\u0E32\u0E08\u0E2A\u0E39\u0E0D\u0E40\u0E2A\u0E35\u0E22\u0E40\u0E07\u0E34\u0E19\u0E43\u0E19\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E31\u0E49\u0E07\u0E2B\u0E21\u0E14\u0E44\u0E1B\u0E40\u0E25\u0E22"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
+  m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12226,8 +12306,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030518, y: 25}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000030518, y: -102.656006}
+  m_SizeDelta: {x: 630, y: 773.8991}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1659897051
 MonoBehaviour:
@@ -12249,10 +12329,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Text
+  m_text: "\u0E43\u0E19\u0E40\u0E0A\u0E49\u0E32\u0E27\u0E31\u0E19\u0E16\u0E31\u0E14\u0E21\u0E32
+    \u0E04\u0E38\u0E13\u0E22\u0E31\u0E07\u0E04\u0E07\u0E04\u0E49\u0E32\u0E07\u0E04\u0E32\u0E01\u0E31\u0E1A\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E07\u0E17\u0E35\u0E48\u0E40\u0E01\u0E34\u0E14\u0E02\u0E36\u0E49\u0E19\u0E40\u0E21\u0E37\u0E48\u0E2D\u0E27\u0E32\u0E19\n\u0E41\u0E15\u0E48\u0E41\u0E25\u0E49\u0E27\u0E01\u0E47\u0E44\u0E14\u0E49\u0E21\u0E35\u0E40\u0E2A\u0E35\u0E22\u0E07\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19\n\u0E21\u0E32\u0E08\u0E32\u0E01\u0E42\u0E17\u0E23\u0E28\u0E31\u0E1E\u0E17\u0E4C\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\u0E43\u0E19\u0E17\u0E38\u0E01\u0E40\u0E0A\u0E49\u0E32\u0E40\u0E2B\u0E21\u0E37\u0E2D\u0E19\u0E17\u0E38\u0E01\u0E17\u0E35
+    \n\u0E04\u0E38\u0E13\u0E44\u0E14\u0E49\u0E41\u0E15\u0E48\u0E2A\u0E07\u0E2A\u0E31\u0E22\u0E40\u0E1E\u0E23\u0E32\u0E30\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E40\u0E2B\u0E25\u0E48\u0E32\u0E19\u0E31\u0E49\u0E19\n\u0E2A\u0E48\u0E07\u0E21\u0E32\u0E08\u0E32\u0E01\u0E25\u0E39\u0E01\u0E0A\u0E32\u0E22\u0E02\u0E2D\u0E07\u0E04\u0E38\u0E13\n\u0E02\u0E49\u0E2D\u0E04\u0E27\u0E32\u0E21\u0E17\u0E35\u0E48\u0E40\u0E02\u0E32\u0E2A\u0E48\u0E07\u0E21\u0E32\u0E01\u0E47\u0E40\u0E1B\u0E47\u0E19\u0E01\u0E32\u0E23\u0E17\u0E31\u0E01\u0E17\u0E32\u0E22\n\u0E41\u0E1A\u0E1A\u0E1B\u0E01\u0E15\u0E34\u0E40\u0E2B\u0E21\u0E37\u0E2D\u0E19\u0E43\u0E19\u0E17\u0E38\u0E01\u0E46
+    \u0E27\u0E31\u0E19\n\u0E04\u0E38\u0E13\u0E23\u0E35\u0E1A\u0E42\u0E17\u0E23\u0E16\u0E32\u0E21\u0E25\u0E39\u0E01\u0E0A\u0E32\u0E22\u0E40\u0E23\u0E37\u0E48\u0E2D\u0E07\u0E01\u0E32\u0E23\u0E16\u0E39\u0E01\u0E08\u0E31\u0E1A
+    \n\u0E25\u0E39\u0E01\u0E0A\u0E32\u0E22\u0E01\u0E47\u0E44\u0E14\u0E49\u0E15\u0E2D\u0E1A\u0E01\u0E25\u0E31\u0E1A\u0E14\u0E49\u0E27\u0E22\u0E17\u0E48\u0E32\u0E17\u0E35\u0E17\u0E35\u0E48\u0E07\u0E38\u0E19\u0E07\u0E07\u0E41\u0E25\u0E30\n\u0E27\u0E35\u0E14\u0E34\u0E42\u0E2D\u0E04\u0E2D\u0E25\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E22\u0E37\u0E19\u0E22\u0E31\u0E19\u0E27\u0E48\u0E32\n\u0E40\u0E02\u0E32\u0E22\u0E31\u0E07\u0E2D\u0E22\u0E39\u0E48\u0E14\u0E35\u0E01\u0E33\u0E25\u0E31\u0E07\u0E08\u0E30\u0E40\u0E02\u0E49\u0E32\u0E17\u0E33\u0E07\u0E32\u0E19
+    \n\u0E27\u0E31\u0E19\u0E19\u0E31\u0E49\u0E19\u0E17\u0E31\u0E49\u0E07\u0E27\u0E31\u0E19\u0E04\u0E38\u0E13\u0E01\u0E47\u0E44\u0E14\u0E49\u0E41\u0E15\u0E48\u0E2A\u0E31\u0E1A\u0E2A\u0E19
+    \u0E1B\u0E23\u0E30\u0E21\u0E27\u0E25\u0E1C\u0E25\u0E16\u0E36\u0E07\u0E40\u0E2B\u0E15\u0E38\u0E01\u0E32\u0E23\u0E13\u0E4C\u0E17\u0E35\u0E48\u0E40\u0E01\u0E34\u0E14\u0E02\u0E36\u0E49\u0E19\u0E08\u0E19\u0E08\u0E1A\u0E27\u0E31\u0E19"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
+  m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12276,8 +12362,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
