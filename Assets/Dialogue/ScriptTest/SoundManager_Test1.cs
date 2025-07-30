@@ -1,98 +1,96 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager_Test1 : MonoBehaviour
 {
     public static SoundManager_Test1 instance;
 
-    public AudioSource bgmSource;
-    public AudioSource sfxSource;
-    public AudioClip bgmThisScene;
-    public AudioClip clickSound;
     [System.Serializable]
-    public class NamedAudioClip
+    public class NamedClip
     {
         public string name;
         public AudioClip clip;
     }
 
-    public List<NamedAudioClip> bgmClips;
-    public List<NamedAudioClip> sfxClips;
+    [Header("BGM Clips")]
+    public List<NamedClip> bgmClips;
+
+    [Header("SFX Clips")]
+    public List<NamedClip> sfxClips;
 
     private Dictionary<string, AudioClip> bgmDict;
     private Dictionary<string, AudioClip> sfxDict;
 
+    private AudioSource bgmPlayer;
+    private AudioSource sfxPlayer;
 
-    void Start()
+    private void Awake()
     {
-        if (bgmThisScene != null && !bgmSource.isPlaying)
-            SoundManager_Test1.instance.PlayBGM(bgmThisScene);
-    }
-    public void OnButtonClick()
-    {
-        SoundManager_Test1.instance.PlaySFX(clickSound);
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
 
-    }
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+        bgmPlayer = gameObject.AddComponent<AudioSource>();
+        bgmPlayer.loop = true;
 
-            bgmDict = new Dictionary<string, AudioClip>();
-            foreach (var item in bgmClips)
-                if (!bgmDict.ContainsKey(item.name)) bgmDict.Add(item.name, item.clip);
+        sfxPlayer = gameObject.AddComponent<AudioSource>();
 
-            sfxDict = new Dictionary<string, AudioClip>();
-            foreach (var item in sfxClips)
-                if (!sfxDict.ContainsKey(item.name)) sfxDict.Add(item.name, item.clip);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        bgmDict = new Dictionary<string, AudioClip>();
+        foreach (var clip in bgmClips)
+            bgmDict[clip.name] = clip.clip;
 
-
-    public void PlayBGM(AudioClip clip)
-    {
-        bgmSource.clip = clip;
-        bgmSource.loop = true;
-        bgmSource.Play();
-    }
-
-    public void StopBGM()
-    {
-        bgmSource.Stop();
-    }
-
-    public void PlaySFX(AudioClip clip)
-    {
-        sfxSource.PlayOneShot(clip);
+        sfxDict = new Dictionary<string, AudioClip>();
+        foreach (var clip in sfxClips)
+            sfxDict[clip.name] = clip.clip;
     }
 
     public void HandleSoundTag(string tag)
     {
-        if (string.IsNullOrEmpty(tag)) return;
-
         if (tag.StartsWith("play_bgm:"))
         {
-            string bgmName = tag.Substring("play_bgm:".Length).Trim();
-            if (bgmDict.ContainsKey(bgmName))
-            {
-                bgmSource.clip = bgmDict[bgmName];
-                bgmSource.Play();
-            }
+            string name = tag.Substring("play_bgm:".Length).Trim();
+            PlayBGM(name);
         }
-        else if (tag.StartsWith("play_sfx:"))
+        else if (tag == "stop_bgm")
         {
-            string sfxName = tag.Substring("play_sfx:".Length).Trim();
-            if (sfxDict.ContainsKey(sfxName))
-            {
-                sfxSource.PlayOneShot(sfxDict[sfxName]);
-            }
+            StopBGM();
+        }
+        else if (tag.StartsWith("play_sound:"))
+        {
+            string name = tag.Substring("play_sound:".Length).Trim();
+            PlaySFX(name);
         }
     }
 
+    private void PlayBGM(string name)
+    {
+        if (bgmDict.TryGetValue(name, out AudioClip clip))
+        {
+            if (bgmPlayer.clip != clip)
+            {
+                bgmPlayer.clip = clip;
+                bgmPlayer.Play();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("❌ ไม่พบ BGM: " + name);
+        }
+    }
+
+    public void StopBGM()
+    {
+        bgmPlayer.Stop();
+    }
+
+    public void PlaySFX(string name)
+    {
+        if (sfxDict.TryGetValue(name, out AudioClip clip))
+        {
+            sfxPlayer.PlayOneShot(clip);
+        }
+        else
+        {
+            Debug.LogWarning("❌ ไม่พบ SFX: " + name);
+        }
+    }
 }
