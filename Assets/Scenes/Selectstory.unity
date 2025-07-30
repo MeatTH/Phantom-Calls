@@ -3476,8 +3476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7836e71ef6d651418adfc7d3fe7d0d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chooseStoryButton: {fileID: 1617745801}
-  inkJSON: {fileID: 4900000, guid: 52c2d26b13489544c9609160425eaeca, type: 3}
 --- !u!1 &1817271512
 GameObject:
   m_ObjectHideFlags: 0
@@ -3667,8 +3665,8 @@ RectTransform:
   - {fileID: 1082188817}
   - {fileID: 1621882891}
   - {fileID: 362169759}
-  - {fileID: 1480478608}
   - {fileID: 566522320}
+  - {fileID: 1480478608}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
