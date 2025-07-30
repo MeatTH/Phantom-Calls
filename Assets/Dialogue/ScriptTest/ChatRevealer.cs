@@ -32,6 +32,7 @@ public class ChatRevealer : MonoBehaviour
         if (currentIndex < chatTexts.Length)
         {
             chatTexts[currentIndex].gameObject.SetActive(true);
+            SoundManager_Test1.instance.PlaySFX("chat_pop");
             currentIndex++;
         }
         else

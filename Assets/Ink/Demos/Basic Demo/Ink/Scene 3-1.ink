@@ -8,14 +8,14 @@
 -> show_callin
 
 == show_callin ==
-# show_panel:PhoneCallIn
+
+# show_panel:PhoneCallIn # play_bgm:ringtone
 คุณได้กดวางสาย
-# hide_panel:PhoneCallIn
-
+# hide_panel:PhoneCallIn  # stop_bgm
 -> call
--->END
+-> END
 == call ==
-
+# stop_bgm
 # show_panel:PhoneCalling
 
 
@@ -55,6 +55,7 @@
 # load_ink:Scene 4-1
 
 -> END
+
 
 
 

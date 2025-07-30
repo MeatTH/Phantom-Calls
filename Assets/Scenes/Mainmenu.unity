@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -375}
+  m_AnchoredPosition: {x: 0, y: -447}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &171589474
@@ -1705,7 +1705,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 1302.6594}
+  m_SizeDelta: {x: 800, y: 1045.054}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &979067868
 MonoBehaviour:
@@ -1856,7 +1856,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015258578, y: -154}
+  m_AnchoredPosition: {x: 0.000015258578, y: -242}
   m_SizeDelta: {x: 709, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1045159002
@@ -1910,6 +1910,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 833042193}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 6e32b71bf46ec434f95fef4089bde3b0, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2333,6 +2345,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 833042196}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 6e32b71bf46ec434f95fef4089bde3b0, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 478898505}
         m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
         m_MethodName: ToggleSoundPanel
@@ -2556,10 +2580,10 @@ RectTransform:
   m_Children:
   - {fileID: 2096247305}
   - {fileID: 979067867}
-  - {fileID: 1045159001}
   - {fileID: 964517561}
   - {fileID: 2140795883}
   - {fileID: 171589472}
+  - {fileID: 1045159001}
   - {fileID: 1824883224}
   - {fileID: 1685134953}
   m_Father: {fileID: 0}
@@ -2716,7 +2740,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 284976822226269212, guid: ef85e92f599c43648aeea4c1efb93e82, type: 3}
+  m_Sprite: {fileID: -3740363508104205867, guid: 9e1e779ac1318f7448021466b921dc99, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
