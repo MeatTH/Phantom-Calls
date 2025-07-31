@@ -21,7 +21,7 @@ public class ChatRevealer : MonoBehaviour
     void Update()
     {
         
-        if (chatPanel.activeInHierarchy && Input.GetMouseButtonDown(0)) // หรือจะใช้ Input.touch ก็ได้
+        if (chatPanel.activeInHierarchy && Input.GetMouseButtonDown(0)) 
         {
             ShowNextLine();
         }
