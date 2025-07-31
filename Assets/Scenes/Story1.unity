@@ -3151,7 +3151,6 @@ MonoBehaviour:
   - {fileID: 1378858728}
   continueButton: {fileID: 388877682}
   inkJSON:
-  - {fileID: 4900000, guid: 6e646ab3c0f93834da59a1e21f8efed4, type: 3}
   - {fileID: 4900000, guid: fb7ce02ff53f8fd4cb22be2d2319119d, type: 3}
   typingSpeed: 0.05
   customPanels:
@@ -12290,9 +12289,11 @@ MonoBehaviour:
   - name: click
     clip: {fileID: 8300000, guid: 6e32b71bf46ec434f95fef4089bde3b0, type: 3}
   - name: Line_messege
-    clip: {fileID: 8300000, guid: 1ca8b7a0286b1e54a826662639bdb372, type: 3}
-  - name: chat_pop
     clip: {fileID: 8300000, guid: de535e3bce8a32649bd4b91b0b68f9ba, type: 3}
+  - name: chat_pop
+    clip: {fileID: 8300000, guid: 1ca8b7a0286b1e54a826662639bdb372, type: 3}
+  - name: continue_dialogue
+    clip: {fileID: 8300000, guid: bebb2da81c9520540bc920c3d3e067c9, type: 3}
 --- !u!82 &1407587847
 AudioSource:
   m_ObjectHideFlags: 0
