@@ -4,7 +4,7 @@ using UnityEngine;
 public class CallController : MonoBehaviour
 {
     [SerializeField] private GameObject callPanel;
-    [SerializeField] private float callRepeatDelay = 1f; 
+    [SerializeField] private float callRepeatDelay = 2f; 
 
     private DialogueManager_Test1 dialogueManager;
 

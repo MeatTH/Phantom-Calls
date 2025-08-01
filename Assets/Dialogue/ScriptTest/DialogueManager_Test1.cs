@@ -131,7 +131,7 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     public void ContinueStory()
     {
-        if (waitingForChatToFinish) return;
+        if (waitingForChatToFinish || isTyping) return;
 
         if (currentStory.canContinue)
         {
@@ -213,8 +213,9 @@ public class DialogueManager_Test1 : MonoBehaviour
             
         }
         choicePanel.SetActive(false);
-       
+
         StartCoroutine(ContinueAfterFrame());
+   
     }
 
     private IEnumerator ContinueAfterFrame()
@@ -289,9 +290,10 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     public void LoadNewInkStory(string inkName)
     {
+        
         Debug.Log("LoadNewInkStory CALLED: " + inkName);
         TextAsset selectedInk = null;
-
+        
         foreach (TextAsset ink in inkJSON)
         {
             if (ink.name == inkName) 
@@ -330,9 +332,10 @@ public class DialogueManager_Test1 : MonoBehaviour
         {
             string inkToLoad = pendingInkToLoad;
             pendingInkToLoad = null;
-            yield return null; 
+            //yield return null; 
             LoadNewInkStory(inkToLoad);
         }
+
     }
 
 }

@@ -12,14 +12,12 @@
 # play_sound:Line_message
 ทุกวันก่อนเขาทำงาน เขามักจะส่งข้อความมาหาคุณเพื่อถามถึงความเป็นอยู่  # show_panel:OnLock
 
-
-
 -> inPhone
 
 -->END
 
 == inPhone ==
-
+# play_sound:Unlock
 # show_panel:Chat2-1
 # hide_panel:PhoneLock
 # hide_panel:OnLock
