@@ -3,14 +3,16 @@
 # hide_panel:BedRoom
 ->Phone
 == Phone ==
-
 # show_panel:PhoneLock
+
+# show_panel:OnLock
 
 “ไม้” คือลูกชายของคุณ เขาไปทำงานที่กรุงเทพฯได้หลายปีแล้ว
 
 
-# play_sound:Line_message
-ทุกวันก่อนเขาทำงาน เขามักจะส่งข้อความมาหาคุณเพื่อถามถึงความเป็นอยู่  # show_panel:OnLock
+//# play_sound:Line_message
+ทุกวันก่อนเขาทำงาน เขามักจะส่งข้อความมาหาคุณเพื่อถามถึงความเป็นอยู่  
+//# show_panel:OnLock
 
 -> inPhone
 
