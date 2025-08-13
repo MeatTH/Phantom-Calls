@@ -3351,7 +3351,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 762d9c50a26173d4ab2511c96f5169c0, type: 3}
   - {fileID: 4900000, guid: 6e646ab3c0f93834da59a1e21f8efed4, type: 3}
   - {fileID: 4900000, guid: fb7ce02ff53f8fd4cb22be2d2319119d, type: 3}
-  typingSpeed: 0.05
+  typingSpeed: 0.03
   customPanels:
   - name: Chat2-1
     panel: {fileID: 1212935978}
