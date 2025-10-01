@@ -338,4 +338,58 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     }
 
+    // ===== เพิ่มใน DialogueManager_Test1.cs =====
+    public void EnsureOpen()
+    {
+        dialogueIsPlaying = true;
+        dialoguePanel.SetActive(true);
+    }
+
+    public void JumpToKnot(string knotName)
+    {
+        if (currentStory == null || string.IsNullOrEmpty(knotName)) return;
+
+        // ถ้า story ยังเล่นอยู่ ให้เลือกเส้นทางใหม่
+        try
+        {
+            currentStory.ChoosePathString(knotName);
+            // จากนั้นให้ ContinueStory ตามปกติ
+            ContinueStory();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"JumpToKnot failed: {knotName}\n{e}");
+        }
+    }
+
+    public void LoadNewInkAndJump(string inkName, string knotName = null)
+    {
+        // โหลดไฟล์ ink ตามชื่อ (เหมือน LoadNewInkStory เดิม)
+        TextAsset selectedInk = null;
+        foreach (TextAsset ink in inkJSON)
+        {
+            if (ink.name == inkName)
+            {
+                selectedInk = ink; break;
+            }
+        }
+        if (selectedInk == null)
+        {
+            Debug.LogError("Ink file not found: " + inkName);
+            return;
+        }
+
+        currentStory = new Ink.Runtime.Story(selectedInk.text);
+        EnsureOpen();
+
+        if (!string.IsNullOrEmpty(knotName))
+        {
+            JumpToKnot(knotName);
+        }
+        else
+        {
+            ContinueStory();
+        }
+    }
+
 }
