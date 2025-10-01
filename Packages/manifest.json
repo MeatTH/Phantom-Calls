@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.phengine.thaitextcare": "https://github.com/phanphantz/ThaiTextCare-for-Unity.git",
     "com.unity.adaptiveperformance.google.android": "5.1.5",
     "com.unity.adaptiveperformance.samsung.android": "5.1.0",
     "com.unity.collab-proxy": "2.8.2",
