@@ -355,7 +355,8 @@ public class ChatFlowController : MonoBehaviour
             SoundManager_Test1.instance.PlaySFX(sfxPopName);
 
         if (scrollRect != null)
-            StartCoroutine(ScrollToBottomDeferred());
+            //StartCoroutine(ScrollToBottomDeferred());
+            StartCoroutine(ScrollToBottomStabilized());
 
         // ★ ตรวจทริกเกอร์หลัง Spawn
         StartCoroutine(CheckSpawnTriggers(prefab));
@@ -430,8 +431,13 @@ public class ChatFlowController : MonoBehaviour
 
     private void OnAllFinished()
     {
-        if (nextButtonAfterAll) nextButtonAfterAll.gameObject.SetActive(false);
-        DialogueManager_Test1.GetInstance()?.OnChatFinished();
+        if (nextButtonAfterAll != null) nextButtonAfterAll.gameObject.SetActive(false);
+        if (chatPanel != null) chatPanel.SetActive(false);
+        //DialogueManager_Test1.GetInstance()?.OnChatFinished();
+
+
+        var mgr = DialogueManager_Test1.GetInstance();
+        if (mgr != null) mgr.OnChatFinished();
     }
 
     private IEnumerator ScrollToBottomDeferred(bool smooth = true, float duration = 0.12f)
@@ -473,4 +479,60 @@ public class ChatFlowController : MonoBehaviour
         }
         scrollRect.verticalNormalizedPosition = target;
     }
+    private IEnumerator ScrollToBottomStabilized(float smoothDuration = 0.12f, int settleFrames = 2)
+    {
+        // เคารพ pause
+        while (isPaused) yield return null;
+
+        // รอเฟรมเพื่อให้ Instantiate + Layout ทำงานรอบแรก
+        yield return null;
+        yield return new WaitForEndOfFrame();
+
+        var content = scrollRect ? scrollRect.content : null;
+        if (content == null) yield break;
+
+        // เฝ้ารอจนความสูง Content “นิ่ง” ติดต่อกัน N เฟรม
+        float lastHeight = -1f;
+        int stableCount = 0;
+
+        for (int guard = 0; guard < 30; guard++) // กันลูปไม่จบ (30 รอบพอ)
+        {
+            while (isPaused) yield return null;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+            float h = content.rect.height;
+
+            if (Mathf.Approximately(h, lastHeight))
+                stableCount++;
+            else
+                stableCount = 0;
+
+            lastHeight = h;
+
+            if (stableCount >= settleFrames) break; // นิ่งแล้ว
+            yield return null; // รอต่ออีกเฟรม
+        }
+
+        // ถึงตรงนี้ค่อยเลื่อนลงล่างสุด
+        if (smoothDuration <= 0f)
+        {
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
+            yield break;
+        }
+
+        float t = 0f;
+        float start = scrollRect.verticalNormalizedPosition;
+        const float target = 0f;
+        while (t < smoothDuration)
+        {
+            while (isPaused) yield return null;
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / smoothDuration));
+            scrollRect.verticalNormalizedPosition = Mathf.Lerp(start, target, k);
+            yield return null;
+        }
+        scrollRect.verticalNormalizedPosition = target;
+    }
+
 }
