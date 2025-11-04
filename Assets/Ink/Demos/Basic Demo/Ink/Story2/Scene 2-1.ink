@@ -1,4 +1,3 @@
-# hide_panel:BedRoom
 # show_panel:PhoneLock
 # play_bgm:
 
@@ -18,10 +17,10 @@
 -> inPhone
 == inPhone ==
 # play_sound:Unlock
-# show_panel:Chat2-1
+# show_panel:Chat
 # hide_panel:PhoneLock
 # hide_panel:OnLock
-# hide_panel:Chat2-1
+# hide_panel:Chat
 
 -> Line
 == Line ==  
