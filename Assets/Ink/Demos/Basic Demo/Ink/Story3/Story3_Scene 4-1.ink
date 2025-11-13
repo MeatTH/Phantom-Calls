@@ -8,10 +8,10 @@
 -> Line
 == Line == 
 # play_sound:Unlock
-# show_panel:
+# show_panel:Chat_PEAOfficial
 # hide_panel:PhoneLock
 # hide_panel:OnLock
-# hide_panel:
+# hide_panel:Chat_PEAOfficial
 
 
 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6733f9bb3d7ff6c4fa08f93805345786
+guid: 36e48563939fb7e43ba5a2dfb2199c80
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4855018802992522432
-    second: "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0"
+      213: -4267002124402294781
+    second: "\u0E2A\u0E2D\u0E1A\u0E16\u0E32\u0E21\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E44\u0E14\u0E49\u0E44\u0E2B\u0E21\u0E04\u0E30_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0"
+      name: "\u0E2A\u0E2D\u0E1A\u0E16\u0E32\u0E21\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E44\u0E14\u0E49\u0E44\u0E2B\u0E21\u0E04\u0E30_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 608
-        height: 183
+        width: 562
+        height: 70
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 04bd9c52f128f9cb0800000000000000
-      internalID: -4855018802992522432
+      spriteID: 3000a27ec2098c4c0800000000000000
+      internalID: -4267002124402294781
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0": -4855018802992522432
+      "\u0E2A\u0E2D\u0E1A\u0E16\u0E32\u0E21\u0E02\u0E49\u0E2D\u0E21\u0E39\u0E25\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E44\u0E14\u0E49\u0E44\u0E2B\u0E21\u0E04\u0E30_0": -4267002124402294781
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

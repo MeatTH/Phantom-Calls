@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6733f9bb3d7ff6c4fa08f93805345786
+guid: ec7960436f4bc4c42b199ff0e8dcba72
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4855018802992522432
-    second: "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0"
+      213: -784643260562022384
+    second: "\u0E42\u0E25\u0E48-green_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 120
+  spritePixelsToUnits: 600
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0"
+      name: "\u0E42\u0E25\u0E48-green_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 608
-        height: 183
+        x: 288
+        y: 24
+        width: 226
+        height: 276
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 04bd9c52f128f9cb0800000000000000
-      internalID: -4855018802992522432
+      spriteID: 010ebca9c136c15f0800000000000000
+      internalID: -784643260562022384
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ba1c9356c7ae883459bf362252f33a5f
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +146,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":true,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      - key: SpriteEditor.SliceOnImport
+        value: True
     nameFileIdTable:
-      "\u0E1A\u0E31\u0E0D\u0E0A\u0E35\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23\u0E08\u0E30\u0E40\u0E19\u0E49\u0E19\u0E01\u0E32\u0E23\u0E41\u0E08\u0E49\u0E07\u0E40\u0E15\u0E37\u0E2D\u0E19-1_0": -4855018802992522432
+      "\u0E42\u0E25\u0E48-green_0": -784643260562022384
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
