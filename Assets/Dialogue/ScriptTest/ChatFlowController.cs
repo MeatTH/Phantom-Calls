@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ChatFlowController : MonoBehaviour
 {
@@ -12,6 +13,15 @@ public class ChatFlowController : MonoBehaviour
     private bool panelWasActive = false;
     private bool isPaused = false;
 
+    // ===== Integrate with Ink / DialogueManager =====
+    [Header("หลังจบแชทให้สั่ง Inkle เดินต่อหรือไม่")]
+    public bool continueInkWhenClosed = true;     // เปิดไว้จะ ContinueStory() อัตโนมัติ
+    [Tooltip("ถ้าต้องการ Jump ไป knot ใดโดยเฉพาะ (ปล่อยว่างเพื่อ Continue ปกติ)")]
+    public string continueInkKnot = "";           // ถ้าใส่ จะ EnsureOpen()+JumpToKnot ก่อน ไม่ใส่จะ ContinueStory()
+
+    // ===== Event ให้ภายนอกรับว่าจบแล้ว =====
+    public event Action<ChatFlowController> OnChatFinishedEvent;
+
     [System.Serializable]
     public class OnSpawnTrigger
     {
@@ -19,8 +29,8 @@ public class ChatFlowController : MonoBehaviour
         public bool closeChatPanel = true;
 
         [Header("เมื่อบับเบิลนี้สแปวน")]
-        public bool showNextButton = false;   // ให้โชว์ปุ่ม Next ณ จุดนี้ไหม
-
+        public bool showNextButton = false;      // แสดงปุ่ม Next เฉพาะจุดและหยุดคิวต่อไปชั่วคราว
+        public bool endChatHere = false;         // ขึ้นบับเบิลนี้แล้ว 'จบแชททันที'
         public bool useInk = true;
         public string inkNameToLoad;
         public string jumpToKnot;
@@ -60,9 +70,9 @@ public class ChatFlowController : MonoBehaviour
         public int nextStep = -1;
         public DockPos dockOverride = DockPos.Pos0;
 
-        // ใหม่: ช้อยนี้จบตอนเลยไหม และอยากโชว์ปุ่ม Next ให้ผู้เล่นยืนยันปิดไหม
-        public bool finishOnPick = false;
-        public bool showNextButtonOnPick = true;
+        [Header("การจบบทจากช้อยส์นี้")]
+        public bool finishOnPick = false;        // เลือกช้อยส์แล้ว 'จบแชททันที'
+        public bool showTapToContinue = true;    // ถ้า finishOnPick=true: ให้แสดงปุ่ม 'แตะเพื่อไปต่อ/ปิด' มั้ย
     }
 
     [Header("คอนเทนต์ของแชท (ScrollView > Content)")]
@@ -78,24 +88,24 @@ public class ChatFlowController : MonoBehaviour
     public GameObject choicesPanel;
     public Button[] choiceDockButtons = new Button[3];
 
-    [Header("พรีวิวกลางล่าง + ปุ่มส่ง")]
+    [Header("พรีวิวกลางล่าง + ปุ่มส่ง (New Text)")]
     public GameObject previewContainer;
     public TMP_Text previewText;
     public float typeCharInterval = 0.02f;
     public Button sendButton;
 
-    [Header("ยก/ลดแถบพิมพ์")]
+    [Header("ยก/ลดแถบพิมพ์ (New Text)")]
     public RectTransform inputDock;
     public Vector2 dockPosNormal;
     public Vector2 dockPosRaised;
     public float dockAnimDuration = 0.2f;
     public AnimationCurve dockCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    [Header("ปุ่มไปต่อ หลังทุกสล็อตจบ (ถ้าต้องการ)")]
-    public Button nextButtonAfterAll;
+    [Header("ปุ่มไปต่อ หลังทุกสล็อตจบ (ปุ่มสรุป)")]
+    public Button nextButtonAfterAll;    // ปุ่มปิด chat และสั่ง ink เดินต่อ
 
-    [Header("ปุ่ม Next เฉพาะจุด (ตัวเดียวใช้ร่วมกัน)")]
-    public Button nextButton;
+    [Header("ปุ่ม Next เฉพาะจุด (หยุดคิวชั่วคราว)")]
+    public Button nextButton;            // ปุ่มหยุด flow ชั่วคราว (เช่น “แตะเพื่อไปต่อ” กลางไทม์ไลน์)
 
     [Header("ไทม์ไลน์ทั้งหมด (เรียง step จากน้อยไปมาก)")]
     public List<Slot> timeline = new List<Slot>();
@@ -110,13 +120,12 @@ public class ChatFlowController : MonoBehaviour
     private Coroutine _dockAnimCo;
     private Coroutine _typingCo;
 
-    // หยุดการไหลเมื่อมีปุ่ม Next เฉพาะจุด
-    private bool flowHaltedByNextButton = false; // กำลังหยุดรอ Next
-    private Slot _haltedSlot = null;             // สล็อตที่หยุดคาไว้ (จะกลับมาโชว์ช้อยส์ของสล็อตนี้)
+    // หยุด flow ชั่วคราวเพราะโชว์ nextButton เฉพาะจุด
+    private bool flowHaltedByNextButton = false;
+    private Slot _haltedSlot = null;
 
-    private enum HaltResumeMode { None, ToChoicesOfSlot, ToNextSlot, FinishAll }
-    private HaltResumeMode _resumeMode = HaltResumeMode.None;
-    private int _resumeNextStep = -1;
+    // หยุด flow แบบ 'จบแชทแล้ว' (ไม่ควรไปต่ออีก)
+    private bool flowTerminated = false;
 
     private void Start()
     {
@@ -149,7 +158,7 @@ public class ChatFlowController : MonoBehaviour
         {
             nextButtonAfterAll.gameObject.SetActive(false);
             nextButtonAfterAll.onClick.RemoveAllListeners();
-            nextButtonAfterAll.onClick.AddListener(OnAllFinished);
+            nextButtonAfterAll.onClick.AddListener(HandleCloseAndContinue); // << ปรับให้ปิด+สั่ง ink
         }
 
         if (nextButton != null)
@@ -184,9 +193,12 @@ public class ChatFlowController : MonoBehaviour
 
     private void RunCurrentSlot()
     {
+        if (flowTerminated) return;
+
         if (currentSlotIndex >= timeline.Count)
         {
-            if (nextButtonAfterAll) nextButtonAfterAll.gameObject.SetActive(true);
+            // จบ timeline -> โชว์ปุ่มสรุป (กดแล้วปิด & Inkle ต่อ)
+            ShowEndButton();
             return;
         }
         var slot = timeline[currentSlotIndex];
@@ -196,7 +208,9 @@ public class ChatFlowController : MonoBehaviour
     private IEnumerator RevealNpcAuto(Slot slot)
     {
         while (isPaused) yield return null;
+        if (flowTerminated) yield break;
 
+        // ถ้ามีข้อความ NPC ในสล็อตนี้ → ลดแถบพิมพ์ลง
         if (slot.npcMessagePrefabs != null && slot.npcMessagePrefabs.Count > 0)
             RaiseInputDock(false);
 
@@ -205,19 +219,24 @@ public class ChatFlowController : MonoBehaviour
             yield return WaitWithPause(slot.npcStartDelay);
             for (int i = 0; i < slot.npcMessagePrefabs.Count; i++)
             {
+                if (flowTerminated) yield break;
+
                 SpawnBubble(slot.npcMessagePrefabs[i]);
                 yield return WaitWithPause(slot.npcInterval);
 
-                // ถ้าถูกสั่งหยุดด้วยปุ่ม Next เฉพาะจุด ให้หยุดทันทีและรอผู้เล่น
+                // ถ้าถูกสั่งหยุดเพราะ nextButton เฉพาะจุด
                 if (flowHaltedByNextButton)
                 {
-                    _haltedSlot = slot;  // จะกลับมาโชว์ช้อยส์ของสล็อตนี้เมื่อกด Next
-                    yield break;         // ไม่ไป TryShowChoices ที่ท้ายฟังก์ชัน
+                    _haltedSlot = slot;
+                    yield break;
                 }
+                // ถ้าถูกสั่ง 'จบแชท' จากบับเบิลนี้
+                if (flowTerminated)
+                    yield break;
             }
         }
 
-        if (flowHaltedByNextButton) yield break;
+        if (flowTerminated || flowHaltedByNextButton) yield break;
 
         TryShowChoices(slot);
     }
@@ -236,6 +255,8 @@ public class ChatFlowController : MonoBehaviour
     private void TryShowChoices(Slot slot)
     {
         HideAllChoiceButtons();
+
+        if (flowTerminated) return;
 
         if (slot.choice == null || slot.choice.options == null || slot.choice.options.Count == 0)
         {
@@ -273,7 +294,6 @@ public class ChatFlowController : MonoBehaviour
     private void OnChoiceClicked(ChoiceSet set, ChoiceOption opt)
     {
         if (opt == null || opt.playerMessagePrefab == null) return;
-
         if (!allowChangeBeforeSend)
         {
             if (isPreviewBusy) return;
@@ -317,7 +337,40 @@ public class ChatFlowController : MonoBehaviour
     {
         if (previewText) previewText.text = "";
         if (!isPreviewBusy || _pendingChoice == null) return;
+
+        // ถ้าเลือกช้อยส์นี้แล้วจบเลย
+        if (_pendingChoice.finishOnPick)
+        {
+            StartCoroutine(FinishByChoiceCo(_pendingChoice));
+            return;
+        }
+
         StartCoroutine(SendFlowCo());
+    }
+
+    private IEnumerator FinishByChoiceCo(ChoiceOption opt)
+    {
+        HideAllChoiceButtons();
+        if (choicesPanel) choicesPanel.SetActive(false);
+
+        // ส่งบับเบิลผู้เล่นก่อน
+        if (sendButton) sendButton.gameObject.SetActive(false);
+        SpawnBubble(opt.playerMessagePrefab);
+
+        _pendingChoice = null;
+        isPreviewBusy = false;
+
+        // แสดงปุ่มแตะเพื่อไปต่อ/ปิด ตามต้องการ
+        if (opt.showTapToContinue && nextButtonAfterAll != null)
+        {
+            yield return WaitWithPause(0.35f);
+            ShowEndButton(); // ใช้ปุ่มสรุปปิด + สั่ง ink ต่อ
+        }
+        else
+        {
+            // ปิดพาเนลและจบแชททันที
+            HandleCloseAndContinue();
+        }
     }
 
     private IEnumerator SendFlowCo()
@@ -340,38 +393,8 @@ public class ChatFlowController : MonoBehaviour
 
         if (sendButton) sendButton.gameObject.SetActive(false);
 
-        // สแปวนบับเบิลของผู้เล่น
         SpawnBubble(_pendingChoice.playerMessagePrefab);
 
-        // ถ้าช้อยนี้จบตอนทันที
-        if (_pendingChoice.finishOnPick)
-        {
-            // ซ่อนสิ่งที่กดได้อื่น ๆ
-            HideAllChoiceButtons();
-            if (choicesPanel) choicesPanel.SetActive(false);
-
-            if (_pendingChoice.showNextButtonOnPick && nextButton != null)
-            {
-                // โชว์ปุ่ม Next ให้ผู้เล่นยืนยันปิด
-                flowHaltedByNextButton = true;
-                _resumeMode = HaltResumeMode.FinishAll; // แตะ Next แล้วจบตอน
-                nextButton.gameObject.SetActive(true);
-
-                _pendingChoice = null;
-                isPreviewBusy = false;
-                yield break; // อย่าเดินต่อ
-            }
-            else
-            {
-                // ไม่ต้องการปุ่ม Next → จบทันที
-                _pendingChoice = null;
-                isPreviewBusy = false;
-                OnAllFinished();
-                yield break;
-            }
-        }
-
-        // เคสปกติ: เดินต่อด้วย branch
         int branch = next;
         _pendingChoice = null;
         isPreviewBusy = false;
@@ -382,6 +405,8 @@ public class ChatFlowController : MonoBehaviour
 
     private void GoToNextStep(int branchNextStep)
     {
+        if (flowTerminated) return;
+
         HideAllChoiceButtons();
 
         if (branchNextStep >= 0)
@@ -421,40 +446,50 @@ public class ChatFlowController : MonoBehaviour
         foreach (var trg in spawnTriggers)
         {
             if (trg == null || trg.whenThisPrefab == null) continue;
-            if (trg.whenThisPrefab == spawnedPrefabRef)
+            if (trg.whenThisPrefab != spawnedPrefabRef) continue;
+
+            if (trg.closeChatPanel && chatPanel != null)
+                chatPanel.SetActive(false);
+
+            if (trg.smallDelay > 0f) yield return new WaitForSeconds(trg.smallDelay);
+
+            if (trg.useInk)
             {
-                if (trg.closeChatPanel && chatPanel != null)
-                    chatPanel.SetActive(false);
-
-                if (trg.smallDelay > 0f) yield return new WaitForSeconds(trg.smallDelay);
-
-                if (trg.useInk)
+                var dlg = DialogueManager_Test1.GetInstance();
+                if (dlg != null)
                 {
-                    var dlg = DialogueManager_Test1.GetInstance();
-                    if (dlg != null)
+                    bool willLoadNew = !string.IsNullOrEmpty(trg.inkNameToLoad);
+                    if (willLoadNew) dlg.LoadNewInkAndJump(trg.inkNameToLoad, trg.jumpToKnot);
+                    else
                     {
-                        bool willLoadNew = !string.IsNullOrEmpty(trg.inkNameToLoad);
-                        if (willLoadNew) dlg.LoadNewInkAndJump(trg.inkNameToLoad, trg.jumpToKnot);
-                        else
-                        {
-                            dlg.EnsureOpen();
-                            if (!string.IsNullOrWhiteSpace(trg.jumpToKnot)) dlg.JumpToKnot(trg.jumpToKnot);
-                            else dlg.ContinueStory();
-                        }
+                        dlg.EnsureOpen();
+                        if (!string.IsNullOrWhiteSpace(trg.jumpToKnot)) dlg.JumpToKnot(trg.jumpToKnot);
+                        else dlg.ContinueStory();
                     }
                 }
+            }
 
-                // โชว์ปุ่ม NEXT เฉพาะจุด และหยุดการไหลต่อ
-                if (trg.showNextButton && nextButton != null)
-                {
-                    HideAllChoiceButtons();
-                    if (choicesPanel) choicesPanel.SetActive(false);
-                    if (sendButton) sendButton.gameObject.SetActive(false);
+            // จบแชทด้วยบับเบิลนี้
+            if (trg.endChatHere)
+            {
+                HideAllChoiceButtons();
+                if (choicesPanel) choicesPanel.SetActive(false);
+                if (sendButton) sendButton.gameObject.SetActive(false);
 
-                    flowHaltedByNextButton = true;
-                    _resumeMode = HaltResumeMode.ToChoicesOfSlot; // กลับไปโชว์ช้อยส์ของสล็อตนี้
-                    nextButton.gameObject.SetActive(true);
-                }
+                flowTerminated = true;
+                ShowEndButton(); // ใช้ปุ่มสรุปปิด + สั่ง ink ต่อ
+                yield break;
+            }
+
+            // โชว์ปุ่ม NEXT เฉพาะจุด (หยุด flow ชั่วคราว)
+            if (trg.showNextButton && nextButton != null)
+            {
+                HideAllChoiceButtons();
+                if (choicesPanel) choicesPanel.SetActive(false);
+                if (sendButton) sendButton.gameObject.SetActive(false);
+
+                flowHaltedByNextButton = true;
+                nextButton.gameObject.SetActive(true);
             }
         }
     }
@@ -477,40 +512,84 @@ public class ChatFlowController : MonoBehaviour
                 choiceDockButtons[i].interactable = interactable;
     }
 
-    private void OnAllFinished()
+    // ====== ปุ่มสรุป / ปิดแชท + สั่ง Inkle ======
+    private void ShowEndButton()
+    {
+        flowTerminated = true; // ถือว่าจบแล้ว รอผู้เล่นกดปุ่มปิด
+        if (nextButtonAfterAll == null)
+        {
+            // ถ้าไม่มีปุ่ม ให้ปิดทันที
+            HandleCloseAndContinue();
+            return;
+        }
+
+        nextButtonAfterAll.gameObject.SetActive(true);
+        // ให้ชัวร์ว่า listener ถูกต้อง (ป้องกันซ้ำจาก Start)
+        nextButtonAfterAll.onClick.RemoveAllListeners();
+        nextButtonAfterAll.onClick.AddListener(HandleCloseAndContinue);
+    }
+
+    private void HandleCloseAndContinue()
     {
         if (nextButtonAfterAll) nextButtonAfterAll.gameObject.SetActive(false);
-        if (chatPanel != null) chatPanel.SetActive(false);
+        TerminateChatAndClose(); // ปิด panel + แจ้ง event + ink ต่อ (ดูในฟังก์ชัน)
+    }
 
-        var mgr = DialogueManager_Test1.GetInstance();
-        if (mgr != null) mgr.OnChatFinished();
+    private void OnAllFinished() // (ไม่ถูกใช้แล้ว แต่เก็บไว้เผื่อเรียกจากภายนอก)
+    {
+        HandleCloseAndContinue();
     }
 
     private void OnNextResumeClicked()
     {
         if (nextButton != null) nextButton.gameObject.SetActive(false);
-        flowHaltedByNextButton = false;
 
-        switch (_resumeMode)
+        // ถ้าถูกสั่งให้จบแชทไว้แล้ว ให้ปิดเลย
+        if (flowTerminated)
         {
-            case HaltResumeMode.ToChoicesOfSlot:
-                if (_haltedSlot != null) TryShowChoices(_haltedSlot);
-                _haltedSlot = null;
-                break;
-
-            case HaltResumeMode.ToNextSlot:
-                GoToNextStep(_resumeNextStep); // -1 = ไปสล็อตถัดไปตามลำดับ
-                break;
-
-            case HaltResumeMode.FinishAll:
-                OnAllFinished(); // ปิดพาเนล/จบตอน
-                break;
+            HandleCloseAndContinue();
+            return;
         }
 
-        _resumeMode = HaltResumeMode.None;
-        _resumeNextStep = -1;
+        // ปลดสถานะพัก และไปต่อที่ช้อยส์ของสล็อตที่ค้างไว้
+        flowHaltedByNextButton = false;
+
+        if (_haltedSlot != null && !flowTerminated)
+        {
+            TryShowChoices(_haltedSlot);
+            _haltedSlot = null;
+        }
     }
 
+    private void TerminateChatAndClose()
+    {
+        flowTerminated = true;
+        if (chatPanel != null) chatPanel.SetActive(false);
+
+        // แจ้งผู้ฟังภายนอก (เช่น ChatManager)
+        OnChatFinishedEvent?.Invoke(this);
+
+        // ควบคุม Inkle ต่อ
+        if (continueInkWhenClosed)
+        {
+            var mgr = DialogueManager_Test1.GetInstance();
+            if (mgr != null)
+            {
+                mgr.EnsureOpen();
+                if (!string.IsNullOrWhiteSpace(continueInkKnot))
+                    mgr.JumpToKnot(continueInkKnot);
+                else
+                    mgr.ContinueStory();
+            }
+        }
+        else
+        {
+            var mgr = DialogueManager_Test1.GetInstance();
+            if (mgr != null) mgr.OnChatFinished(); // แจ้งว่าแชทจบ แต่ไม่สั่งเดินเรื่อง
+        }
+    }
+
+    // ===== Scroll / UI Motion =====
     private IEnumerator ScrollToBottomStabilized(float smoothDuration = 0.12f, int settleFrames = 2)
     {
         while (isPaused) yield return null;
