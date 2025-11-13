@@ -17,11 +17,16 @@ public class ChatFlowController : MonoBehaviour
     {
         public GameObject whenThisPrefab;
         public bool closeChatPanel = true;
+
+        [Header("เมื่อบับเบิลนี้สแปวน")]
+        public bool showNextButton = false;   // ให้โชว์ปุ่ม Next ณ จุดนี้ไหม
+
         public bool useInk = true;
         public string inkNameToLoad;
         public string jumpToKnot;
         public float smallDelay = 0.15f;
     }
+
     [Header("ทริกเกอร์เมื่อบับเบิลบางอันปรากฏ")]
     public List<OnSpawnTrigger> spawnTriggers = new List<OnSpawnTrigger>();
 
@@ -42,7 +47,6 @@ public class ChatFlowController : MonoBehaviour
     public class ChoiceSet
     {
         public List<ChoiceOption> options = new List<ChoiceOption>();
-
         [Tooltip("เลือกแล้วปิดปุ่มอื่น (จะถูกเพิกเฉยถ้า allowChangeBeforeSend=true)")]
         public bool destroyOthersOnPick = true;
     }
@@ -55,6 +59,10 @@ public class ChatFlowController : MonoBehaviour
         public GameObject playerMessagePrefab;
         public int nextStep = -1;
         public DockPos dockOverride = DockPos.Pos0;
+
+        // ใหม่: ช้อยนี้จบตอนเลยไหม และอยากโชว์ปุ่ม Next ให้ผู้เล่นยืนยันปิดไหม
+        public bool finishOnPick = false;
+        public bool showNextButtonOnPick = true;
     }
 
     [Header("คอนเทนต์ของแชท (ScrollView > Content)")]
@@ -70,13 +78,13 @@ public class ChatFlowController : MonoBehaviour
     public GameObject choicesPanel;
     public Button[] choiceDockButtons = new Button[3];
 
-    [Header("พรีวิวกลางล่าง + ปุ่มส่ง (New Text)")]
+    [Header("พรีวิวกลางล่าง + ปุ่มส่ง")]
     public GameObject previewContainer;
     public TMP_Text previewText;
     public float typeCharInterval = 0.02f;
     public Button sendButton;
 
-    [Header("ยก/ลดแถบพิมพ์ (New Text)")]
+    [Header("ยก/ลดแถบพิมพ์")]
     public RectTransform inputDock;
     public Vector2 dockPosNormal;
     public Vector2 dockPosRaised;
@@ -86,6 +94,9 @@ public class ChatFlowController : MonoBehaviour
     [Header("ปุ่มไปต่อ หลังทุกสล็อตจบ (ถ้าต้องการ)")]
     public Button nextButtonAfterAll;
 
+    [Header("ปุ่ม Next เฉพาะจุด (ตัวเดียวใช้ร่วมกัน)")]
+    public Button nextButton;
+
     [Header("ไทม์ไลน์ทั้งหมด (เรียง step จากน้อยไปมาก)")]
     public List<Slot> timeline = new List<Slot>();
 
@@ -94,10 +105,18 @@ public class ChatFlowController : MonoBehaviour
 
     // ====== State ======
     private int currentSlotIndex = 0;
-    private bool isPreviewBusy = false;          // อยู่ในโหมดพรีวิว/รอส่ง
-    private ChoiceOption _pendingChoice = null;  /// ตัวเลือก “ล่าสุด” ที่จะถูกส่ง
+    private bool isPreviewBusy = false;
+    private ChoiceOption _pendingChoice = null;
     private Coroutine _dockAnimCo;
-    private Coroutine _typingCo;                 // ควบคุม coroutine พิมพ์พรีวิว
+    private Coroutine _typingCo;
+
+    // หยุดการไหลเมื่อมีปุ่ม Next เฉพาะจุด
+    private bool flowHaltedByNextButton = false; // กำลังหยุดรอ Next
+    private Slot _haltedSlot = null;             // สล็อตที่หยุดคาไว้ (จะกลับมาโชว์ช้อยส์ของสล็อตนี้)
+
+    private enum HaltResumeMode { None, ToChoicesOfSlot, ToNextSlot, FinishAll }
+    private HaltResumeMode _resumeMode = HaltResumeMode.None;
+    private int _resumeNextStep = -1;
 
     private void Start()
     {
@@ -131,6 +150,13 @@ public class ChatFlowController : MonoBehaviour
             nextButtonAfterAll.gameObject.SetActive(false);
             nextButtonAfterAll.onClick.RemoveAllListeners();
             nextButtonAfterAll.onClick.AddListener(OnAllFinished);
+        }
+
+        if (nextButton != null)
+        {
+            nextButton.gameObject.SetActive(false);
+            nextButton.onClick.RemoveAllListeners();
+            nextButton.onClick.AddListener(OnNextResumeClicked);
         }
     }
 
@@ -171,7 +197,6 @@ public class ChatFlowController : MonoBehaviour
     {
         while (isPaused) yield return null;
 
-        // ถ้าสล็อตนี้มีข้อความ NPC → ลดแถบทันที (กันเคสเข้ามาสล็อตนี้โดยตรง)
         if (slot.npcMessagePrefabs != null && slot.npcMessagePrefabs.Count > 0)
             RaiseInputDock(false);
 
@@ -182,12 +207,20 @@ public class ChatFlowController : MonoBehaviour
             {
                 SpawnBubble(slot.npcMessagePrefabs[i]);
                 yield return WaitWithPause(slot.npcInterval);
+
+                // ถ้าถูกสั่งหยุดด้วยปุ่ม Next เฉพาะจุด ให้หยุดทันทีและรอผู้เล่น
+                if (flowHaltedByNextButton)
+                {
+                    _haltedSlot = slot;  // จะกลับมาโชว์ช้อยส์ของสล็อตนี้เมื่อกด Next
+                    yield break;         // ไม่ไป TryShowChoices ที่ท้ายฟังก์ชัน
+                }
             }
         }
 
+        if (flowHaltedByNextButton) yield break;
+
         TryShowChoices(slot);
     }
-
 
     private IEnumerator WaitWithPause(float seconds)
     {
@@ -241,24 +274,19 @@ public class ChatFlowController : MonoBehaviour
     {
         if (opt == null || opt.playerMessagePrefab == null) return;
 
-        // อนุญาตให้เปลี่ยนช้อยได้เสมอ: ไม่ล็อกปุ่ม, ไม่ซ่อนปุ่มที่เหลือ
         if (!allowChangeBeforeSend)
         {
-            if (isPreviewBusy)
-                return; // โหมดเดิม: ไม่ให้เปลี่ยนถ้ายังไม่ส่ง
+            if (isPreviewBusy) return;
             if (set.destroyOthersOnPick) HideAllChoiceButtons();
             else SetAllChoiceButtonsInteractable(false);
         }
         else
         {
-            // โหมดใหม่: ปุ่มอื่นยังกดได้อยู่
             SetAllChoiceButtonsInteractable(true);
         }
 
-        // เข้าสู่โหมดพรีวิว (ถ้ายังไม่เข้า)
         isPreviewBusy = true;
 
-        // หยุดพิมพ์เดิม (ถ้ามี), เริ่มพิมพ์ใหม่ตามช้อย “ล่าสุด”
         if (_typingCo != null) StopCoroutine(_typingCo);
 
         string txt =
@@ -282,7 +310,7 @@ public class ChatFlowController : MonoBehaviour
 
         _pendingChoice = opt;
         if (sendButton) sendButton.gameObject.SetActive(true);
-        _typingCo = null; // พิมพ์เสร็จ
+        _typingCo = null;
     }
 
     private void OnSendClicked()
@@ -299,7 +327,6 @@ public class ChatFlowController : MonoBehaviour
 
         int next = _pendingChoice.nextStep;
 
-        // ถ้าสล็อตถัดไปเริ่มด้วย NPC → ลดแถบลง, ไม่งั้นคงแถบไว้ (เพราะจะเป็นเทิร์นผู้เล่นอีก)
         bool nextIsNpc = NextSlotStartsWithNpc(next);
         if (nextIsNpc)
         {
@@ -308,13 +335,43 @@ public class ChatFlowController : MonoBehaviour
         }
         else
         {
-            yield return null; // คงแถบไว้
+            yield return null;
         }
 
         if (sendButton) sendButton.gameObject.SetActive(false);
 
+        // สแปวนบับเบิลของผู้เล่น
         SpawnBubble(_pendingChoice.playerMessagePrefab);
 
+        // ถ้าช้อยนี้จบตอนทันที
+        if (_pendingChoice.finishOnPick)
+        {
+            // ซ่อนสิ่งที่กดได้อื่น ๆ
+            HideAllChoiceButtons();
+            if (choicesPanel) choicesPanel.SetActive(false);
+
+            if (_pendingChoice.showNextButtonOnPick && nextButton != null)
+            {
+                // โชว์ปุ่ม Next ให้ผู้เล่นยืนยันปิด
+                flowHaltedByNextButton = true;
+                _resumeMode = HaltResumeMode.FinishAll; // แตะ Next แล้วจบตอน
+                nextButton.gameObject.SetActive(true);
+
+                _pendingChoice = null;
+                isPreviewBusy = false;
+                yield break; // อย่าเดินต่อ
+            }
+            else
+            {
+                // ไม่ต้องการปุ่ม Next → จบทันที
+                _pendingChoice = null;
+                isPreviewBusy = false;
+                OnAllFinished();
+                yield break;
+            }
+        }
+
+        // เคสปกติ: เดินต่อด้วย branch
         int branch = next;
         _pendingChoice = null;
         isPreviewBusy = false;
@@ -322,7 +379,6 @@ public class ChatFlowController : MonoBehaviour
         yield return WaitWithPause(0.35f);
         GoToNextStep(branch);
     }
-
 
     private void GoToNextStep(int branchNextStep)
     {
@@ -382,12 +438,23 @@ public class ChatFlowController : MonoBehaviour
                         else
                         {
                             dlg.EnsureOpen();
-                            if (!string.IsNullOrEmpty(trg.jumpToKnot)) dlg.JumpToKnot(trg.jumpToKnot);
+                            if (!string.IsNullOrWhiteSpace(trg.jumpToKnot)) dlg.JumpToKnot(trg.jumpToKnot);
                             else dlg.ContinueStory();
                         }
                     }
                 }
-                break;
+
+                // โชว์ปุ่ม NEXT เฉพาะจุด และหยุดการไหลต่อ
+                if (trg.showNextButton && nextButton != null)
+                {
+                    HideAllChoiceButtons();
+                    if (choicesPanel) choicesPanel.SetActive(false);
+                    if (sendButton) sendButton.gameObject.SetActive(false);
+
+                    flowHaltedByNextButton = true;
+                    _resumeMode = HaltResumeMode.ToChoicesOfSlot; // กลับไปโชว์ช้อยส์ของสล็อตนี้
+                    nextButton.gameObject.SetActive(true);
+                }
             }
         }
     }
@@ -417,6 +484,31 @@ public class ChatFlowController : MonoBehaviour
 
         var mgr = DialogueManager_Test1.GetInstance();
         if (mgr != null) mgr.OnChatFinished();
+    }
+
+    private void OnNextResumeClicked()
+    {
+        if (nextButton != null) nextButton.gameObject.SetActive(false);
+        flowHaltedByNextButton = false;
+
+        switch (_resumeMode)
+        {
+            case HaltResumeMode.ToChoicesOfSlot:
+                if (_haltedSlot != null) TryShowChoices(_haltedSlot);
+                _haltedSlot = null;
+                break;
+
+            case HaltResumeMode.ToNextSlot:
+                GoToNextStep(_resumeNextStep); // -1 = ไปสล็อตถัดไปตามลำดับ
+                break;
+
+            case HaltResumeMode.FinishAll:
+                OnAllFinished(); // ปิดพาเนล/จบตอน
+                break;
+        }
+
+        _resumeMode = HaltResumeMode.None;
+        _resumeNextStep = -1;
     }
 
     private IEnumerator ScrollToBottomStabilized(float smoothDuration = 0.12f, int settleFrames = 2)
@@ -480,9 +572,9 @@ public class ChatFlowController : MonoBehaviour
         }
         inputDock.anchoredPosition = targetPos;
     }
+
     private bool NextSlotHasPlayerChoices(int nextStep)
     {
-        // หา index ของสล็อตถัดไปจริง ๆ
         int idx = (nextStep >= 0)
             ? timeline.FindIndex(s => s.step == nextStep)
             : currentSlotIndex + 1;
@@ -490,11 +582,11 @@ public class ChatFlowController : MonoBehaviour
         if (idx < 0 || idx >= timeline.Count) return false;
 
         var ch = timeline[idx].choice;
-        return ch != null && ch.options != null && ch.options.Count > 0; // ≥ 1 ตัวเลือก
+        return ch != null && ch.options != null && ch.options.Count > 0;
     }
+
     private bool NextSlotStartsWithNpc(int nextStep)
     {
-        // คำนวณ index ของสล็อตถัดไปจริง ๆ
         int idx = (nextStep >= 0)
             ? timeline.FindIndex(s => s.step == nextStep)
             : currentSlotIndex + 1;
@@ -502,8 +594,6 @@ public class ChatFlowController : MonoBehaviour
         if (idx < 0 || idx >= timeline.Count) return false;
 
         var s = timeline[idx];
-        return s.npcMessagePrefabs != null && s.npcMessagePrefabs.Count > 0; // NPC จะขึ้นก่อนเสมอ
+        return s.npcMessagePrefabs != null && s.npcMessagePrefabs.Count > 0;
     }
-
-
 }
