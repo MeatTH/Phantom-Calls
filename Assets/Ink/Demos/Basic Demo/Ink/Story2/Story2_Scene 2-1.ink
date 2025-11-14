@@ -20,12 +20,11 @@
 # show_panel:Chat
 # hide_panel:PhoneLock
 # hide_panel:OnLock
-แสดงแชท
 # hide_panel:Chat
 
-//-> Line
-//== Line ==  
-//# show_panel:PhoneLock
+-> Line
+== Line ==  
+# show_panel:PhoneLock
 
 # load_ink:Story2_Scene 3-1
 
