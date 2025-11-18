@@ -46,10 +46,10 @@ public class DialogueManager_Test1 : MonoBehaviour
     //private bool dialogueIsPlaying { get; private set; }
 
     private static DialogueManager_Test1 instance;
- 
+
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Debug.LogWarning("...");
         }
@@ -144,7 +144,7 @@ public class DialogueManager_Test1 : MonoBehaviour
                 HandleTag(tag);
                 SoundManager_Test1.instance.HandleSoundTag(tag);
             }
-            
+
             if (typingCoroutine != null)
             {
                 StopCoroutine(typingCoroutine);
@@ -181,7 +181,7 @@ public class DialogueManager_Test1 : MonoBehaviour
         }
 
         int index = 0;
-        foreach(Choice choice in currentChoices)
+        foreach (Choice choice in currentChoices)
         {
             choices[index].gameObject.SetActive(true);
             choicesText[index].text = choice.text;
@@ -192,7 +192,7 @@ public class DialogueManager_Test1 : MonoBehaviour
             //choicePanel.SetActive(false);
             choices[i].gameObject.SetActive(false);
         }
-        
+
         StartCoroutine(SelectFirstChoice());
     }
 
@@ -210,12 +210,12 @@ public class DialogueManager_Test1 : MonoBehaviour
         foreach (GameObject choice in choices)
         {
             choice.SetActive(false);
-            
+
         }
         choicePanel.SetActive(false);
 
         StartCoroutine(ContinueAfterFrame());
-   
+
     }
 
     private IEnumerator ContinueAfterFrame()
@@ -255,7 +255,7 @@ public class DialogueManager_Test1 : MonoBehaviour
                 if (panelName.StartsWith("Chat"))
                 {
                     waitingForChatToFinish = true;
-                } 
+                }
             }
             else
             {
@@ -285,18 +285,18 @@ public class DialogueManager_Test1 : MonoBehaviour
     public void OnChatFinished()
     {
         waitingForChatToFinish = false;
-        ContinueStory(); 
+        ContinueStory();
     }
 
     public void LoadNewInkStory(string inkName)
     {
-        
+
         Debug.Log("LoadNewInkStory CALLED: " + inkName);
         TextAsset selectedInk = null;
-        
+
         foreach (TextAsset ink in inkJSON)
         {
-            if (ink.name == inkName) 
+            if (ink.name == inkName)
             {
                 selectedInk = ink;
                 break;

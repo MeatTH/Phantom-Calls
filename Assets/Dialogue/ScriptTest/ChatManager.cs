@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections.Generic;
 
 public class ChatManager : MonoBehaviour
@@ -42,3 +42,4 @@ public class ChatManager : MonoBehaviour
         if (panelToOpen != null) panelToOpen.SetActive(true);
     }
 }
+*/

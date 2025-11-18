@@ -1,5 +1,3 @@
-# show_panel:PhoneLock
-
 เวลาผ่านไปได้ไม่นาน ก็มีแจ้งเตือนขึ้นมาจาก PEA Official
 
 # show_panel:PhoneLock
@@ -8,10 +6,11 @@
 -> Line
 == Line == 
 # play_sound:Unlock
-# show_panel:
+# show_panel:Chat_PEAOfficial
 # hide_panel:PhoneLock
 # hide_panel:OnLock
-# hide_panel:
+แชท
+# hide_panel:Chat_PEAOfficial
 
 -> Ending1BadEnd 
 == Ending1BadEnd ==
@@ -57,6 +56,14 @@
 ค่าไฟที่บ้านของเขาก็เพิ่มขึ้นเช่นกัน
 และแล้ว หัวข้อนี้ในการสนทนาก็เป็นเพียงเรื่องราวตลกขบขันที่แฝงไปด้วยสามัญสำนึกทั่วไปที่คุณอาจจะลืมคิดถึงไปหรือเปล่านะ?
 
+-> PreEnding3AlternativeEnd
+== PreEnding3AlternativeEnd ==
 
+คุณสัมผัสได้ถึงบางสิ่งที่ผิดปกติ
+
+รายชื่อบัญชีเป็นบัญชีส่วนบุคคล ไม่ใช่บัญชีทางการ
+
+คุณจึงเลือกที่จะยกเลิกการโอน และเลิกติดต่อกับบัญชี Line นั้นไป
+-> Ending3AlternativeEnd
 
 -> END
