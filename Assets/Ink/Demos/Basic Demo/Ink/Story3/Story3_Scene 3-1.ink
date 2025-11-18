@@ -68,7 +68,6 @@
 
 == Scene3_9 ==
 # hide_panel:PhoneCalling
-# show_panel:PhoneLock
 หลังสิ้นสุดเสียงพูดของพนักงาน สายโทรศัพท์ก็ได้ถูกวางลง
 
 # load_ink:Story3_Scene 4-1

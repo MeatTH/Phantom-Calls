@@ -16,14 +16,19 @@
 -> inPhone
 == inPhone ==
 # play_sound:Unlock
-# show_panel:Chat2-1
+# show_panel:Chat_PEAThailand
 # hide_panel:PhoneLock
 # hide_panel:OnLock
-# hide_panel:Chat2-1
+แชท
+# hide_panel:Chat_PEAThailand
 
 -> Line
 == Line ==  
-# show_panel:PhoneLock
+# show_panel:LivingRoom
+
+ค่าไฟเดือนนี้ก็แพงขึ้นอีกแล้วหรอ?
+
+เมื่อสิ้นปีจ่ายค่าไฟแค่ 2,000 เองนะ
 
 # load_ink:Story3_Scene 3-1
 
