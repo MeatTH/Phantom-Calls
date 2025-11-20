@@ -1,17 +1,16 @@
 //# show_panel:LivingRoom
 
-ช่วงสายของวันถัดมาในขณะที่คุณกำลังพักผ่อนอยู่ใน ห้องนั่งเล่น
+ช่วงสายของวันถัดมาในขณะที่คุณกำลังพักผ่อนอยู่ในห้องนั่งเล่น
 
 -> show_callin
-
 == show_callin ==
 //# play_bgm:ringtone
 # show_panel:PhoneCallIn 
-คุณกดรับสายโทรศัพท์
+คุณได้กดวางสายโทรศัพท์  
 # hide_panel:PhoneCallIn  
 //# stop_bgm
 -> call
---> END
+//--> END
 
 == call ==
 # show_panel:PhoneCalling # hide_panel:LivingRoom

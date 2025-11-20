@@ -1,11 +1,7 @@
-# hide_panel:LivingRoom
-# show_panel:PhoneLock
-# play_bgm:
-
 ->Phone
 == Phone ==
 # show_panel:PhoneLock
-# show_panel:OnLock
+# show_panel:OnLock_TH
 
 หน้าจอโทรศัพท์ปรากฏข้อความแจ้งเตือนไลน์จากการไฟฟ้าส่วนภูมิภาค
 
@@ -18,7 +14,7 @@
 # play_sound:Unlock
 # show_panel:Chat_PEAThailand
 # hide_panel:PhoneLock
-# hide_panel:OnLock
+# hide_panel:OnLock_TH
 แชท
 # hide_panel:Chat_PEAThailand
 

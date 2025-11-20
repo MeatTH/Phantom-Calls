@@ -1,5 +1,5 @@
 # show_panel:LivingRoom
-# play_bgm:
+//# play_bgm:morning
 
 ณ ห้องนั่งเล่นยามสายในเดือนเมษายน 
 

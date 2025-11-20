@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ad135c97e6242674e8a3e84c7fd7bc97
+guid: 82fc3df6ac03e574d938b8d2c39b8ef3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2373724824104669501
-    second: QR_0
+      213: 5956635684994182156
+    second: "\u0E01\u0E32\u0E23\u0E44\u0E1F\u0E1F\u0E49\u0E32_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: QR_0
+      name: "\u0E01\u0E32\u0E23\u0E44\u0E1F\u0E1F\u0E49\u0E32_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 519
-        height: 835
+        width: 925
+        height: 1540
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d311947a62a21f020800000000000000
-      internalID: 2373724824104669501
+      spriteID: c0c6e7c88983aa250800000000000000
+      internalID: 5956635684994182156
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      QR_0: 2373724824104669501
+      "\u0E01\u0E32\u0E23\u0E44\u0E1F\u0E1F\u0E49\u0E32_0": 5956635684994182156
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

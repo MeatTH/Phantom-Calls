@@ -1,14 +1,14 @@
 เวลาผ่านไปได้ไม่นาน ก็มีแจ้งเตือนขึ้นมาจาก PEA Official
 
 # show_panel:PhoneLock
-# show_panel:OnLock
+# show_panel:OnLock_Of
 
 -> Line
 == Line == 
 # play_sound:Unlock
 # show_panel:Chat_PEAOfficial
 # hide_panel:PhoneLock
-# hide_panel:OnLock
+# hide_panel:OnLock_Of
 แชท
 # hide_panel:Chat_PEAOfficial
 
@@ -27,12 +27,15 @@
 
 -> Ending2GoodEnd
 == Ending2GoodEnd == 
-# hide_panel:
-# show_panel:
+# hide_panel:LivingRoom
+# show_panel:PEA
 
 เช้าวันรุ่งขึ้น คุณได้เดินทางไปยังการไฟฟ้าส่วนภูมิภาค
 คุณพูดคุยกับเจ้าหน้าที่เรื่องของการเปลี่ยนมิเตอร์และการจ่ายค่าไฟ
 เจ้าหน้าที่ได้ฟังเรื่องราวของคุณและกล่าวชื่นชมคุณ
+
+# hide_panel:PEA
+# show_panel:Ending2GoodEnd
 อีกทั้งเจ้าหน้าที่ยังแนะนำคุณอีกด้วยว่า
 บัญชีของการไฟฟ้ามีเพียงบัญชีเดียวคือ @PEAThailand
 ซึ่งบัญชีแท้ต้องมีสัญลักษณ์โล่สีเขียวอยู่ข้างหน้าชื่อ
@@ -40,10 +43,9 @@
 คุณยังสามาถชำระค่าไฟในรูปออนไลน์ได้โดยไม่ต้องมาที่การไฟฟ้า
 แต่เรื่องของมิเตอร์นั้น ต้องมาติดต่อกับการไฟฟ้าโดยตรงเท่านั้น
 
-
 -> Ending3AlternativeEnd
 == Ending3AlternativeEnd ==
-# hide_panel:
+# hide_panel:LivingRoom
 # show_panel:
 
 แล้วเวลาก็ล่วงเลยมาหนึ่งสัปดาห์
@@ -64,6 +66,7 @@
 รายชื่อบัญชีเป็นบัญชีส่วนบุคคล ไม่ใช่บัญชีทางการ
 
 คุณจึงเลือกที่จะยกเลิกการโอน และเลิกติดต่อกับบัญชี Line นั้นไป
+
 -> Ending3AlternativeEnd
 
 -> END

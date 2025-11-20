@@ -1,12 +1,12 @@
 # ninja log v5
-149	903	7757785913048689	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	40aadc09a26498d0
-905	2150	7757785921394510	D:/Eve/Project/Phantom-Calls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1q4y02qh/obj/arm64-v8a/libswappywrapper.so	1c1406dbf59128a1
-25	4654	7757785952479111	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	e9154e4e96d2a18c
-133	4667	7757785952631783	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	425c5602d8f8c7c4
-89	4741	7757785953405307	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	69c50fd5fb61c617
-69	4744	7757785953131348	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	c5662b2cfa48c079
-3	4817	7757785953510907	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	aaaff1f3466be97a
-107	4933	7757785955140412	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	2ec79a7edcabc4a6
-58	5305	7757785958505871	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8a5cab3ce55f0a2b
-42	5646	7757785962137643	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7d147b30b39f8547
-5646	5855	7757785964319080	D:/Eve/Project/Phantom-Calls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1q4y02qh/obj/arm64-v8a/libgame.so	981d06a370eb15be
+101	899	7852483209887957	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	40aadc09a26498d0
+900	1518	7852483214855661	D:/Eve/Project/Phantom-Calls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1q4y02qh/obj/arm64-v8a/libswappywrapper.so	1c1406dbf59128a1
+55	3715	7852483237956431	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	69c50fd5fb61c617
+45	3797	7852483238554500	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	c5662b2cfa48c079
+4	3873	7852483239309308	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	e9154e4e96d2a18c
+79	3886	7852483239764057	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	425c5602d8f8c7c4
+26	4005	7852483240665831	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	aaaff1f3466be97a
+92	4334	7852483244177968	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	2ec79a7edcabc4a6
+68	4589	7852483246606255	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8a5cab3ce55f0a2b
+35	5114	7852483251912975	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7d147b30b39f8547
+5114	5395	7852483254626020	D:/Eve/Project/Phantom-Calls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1q4y02qh/obj/arm64-v8a/libgame.so	981d06a370eb15be
