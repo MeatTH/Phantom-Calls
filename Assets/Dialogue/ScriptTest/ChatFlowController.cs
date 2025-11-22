@@ -94,6 +94,7 @@ public class ChatFlowController : MonoBehaviour
 
     [Header("ยก/ลดแถบพิมพ์ (New Text)")]
     public RectTransform inputDock;
+    public RectTransform inputDock_ScrollView;
     public Vector2 dockPosNormal;
     public Vector2 dockPosRaised;
     public float dockAnimDuration = 0.2f;
@@ -276,7 +277,7 @@ public class ChatFlowController : MonoBehaviour
 
     private void OnChoiceClicked(ChoiceSet set, ChoiceOption opt)
     {
-        
+
 
         // อนุญาตให้เปลี่ยนช้อยได้เสมอ: ไม่ล็อกปุ่ม, ไม่ซ่อนปุ่มที่เหลือ
         if (!allowChangeBeforeSend)
@@ -412,9 +413,6 @@ public class ChatFlowController : MonoBehaviour
         GoToNextStep(branch);
     }
 
-
-
-
     private void GoToNextStep(int branchNextStep)
     {
         HideAllChoiceButtons();
@@ -446,11 +444,19 @@ public class ChatFlowController : MonoBehaviour
         if (!string.IsNullOrEmpty(sfxPopName) && SoundManager_Test1.instance != null)
             SoundManager_Test1.instance.PlaySFX(sfxPopName);
 
+        // เดิม: ScrollToBottomStabilized();
         if (scrollRect != null)
-            StartCoroutine(ScrollToBottomStabilized());
+        {
+            var rt = go.GetComponent<RectTransform>();
+            if (rt != null)
+                StartCoroutine(ScrollToRevealBubble(rt));
+            else
+                StartCoroutine(ScrollToBottomStabilized()); // กันพลาด ถ้าไม่มี RectTransform
+        }
 
         StartCoroutine(CheckSpawnTriggers(prefab));
     }
+
 
     private IEnumerator CheckSpawnTriggers(GameObject spawnedPrefabRef)
     {
@@ -523,6 +529,70 @@ public class ChatFlowController : MonoBehaviour
         if (mgr != null) mgr.OnChatFinished();
     }
 
+    private IEnumerator ScrollToRevealBubble(RectTransform target, float smoothDuration = 0.12f)
+    {
+        if (scrollRect == null || target == null) yield break;
+
+        var content = scrollRect.content;
+        if (content == null) yield break;
+
+        // ใช้ viewport ถ้ามี ไม่งั้นใช้ตัว ScrollRect เอง
+        RectTransform viewport = scrollRect.viewport != null
+            ? scrollRect.viewport
+            : (RectTransform)scrollRect.transform;
+
+        // รอให้ layout คำนวณเสร็จก่อน (อย่างน้อย 1–2 เฟรม)
+        while (isPaused) yield return null;
+        yield return null;
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+
+        // คำนวณตำแหน่งของ bubble และ viewport ใน local space ของ content
+        Vector3[] viewWorld = new Vector3[4];
+        Vector3[] targetWorld = new Vector3[4];
+        viewport.GetWorldCorners(viewWorld);
+        target.GetWorldCorners(targetWorld);
+
+        Vector3 viewBottomInContent = content.InverseTransformPoint(viewWorld[0]);
+        Vector3 viewTopInContent = content.InverseTransformPoint(viewWorld[1]);
+        Vector3 bubbleBottomInContent = content.InverseTransformPoint(targetWorld[0]);
+        Vector3 bubbleTopInContent = content.InverseTransformPoint(targetWorld[1]);
+
+        // หาว่า bubble ล้นออกนอกกรอบไหม แล้วต้องขยับ content เท่าไหร่
+        float offsetY = 0f;
+        float margin = 20f; // ระยะ padding จากขอบล่าง/บน อยากได้เท่าไหร่ลองปรับได้
+
+        // ถ้าก้น bubble ต่ำกว่าก้น viewport → เลื่อนขึ้น
+        if (bubbleBottomInContent.y < viewBottomInContent.y)
+        {
+            offsetY = (viewBottomInContent.y + margin) - bubbleBottomInContent.y;
+        }
+        // ถ้าหัว bubble สูงกว่าหัว viewport → เลื่อนลง
+        else if (bubbleTopInContent.y > viewTopInContent.y)
+        {
+            offsetY = (viewTopInContent.y - margin) - bubbleTopInContent.y;
+        }
+
+
+        // ถ้าปกติ bubble อยู่ในกรอบอยู่แล้ว → ไม่ต้องเลื่อน
+        if (Mathf.Approximately(offsetY, 0f)) yield break;
+
+        Vector2 startPos = content.anchoredPosition;
+        Vector2 targetPos = startPos + new Vector2(0f, offsetY);
+
+        float t = 0f;
+        while (t < smoothDuration)
+        {
+            while (isPaused) yield return null;
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / smoothDuration));
+            content.anchoredPosition = Vector2.LerpUnclamped(startPos, targetPos, k);
+            yield return null;
+        }
+
+        content.anchoredPosition = targetPos;
+    }
+
     private IEnumerator ScrollToBottomStabilized(float smoothDuration = 0.12f, int settleFrames = 2)
     {
         while (isPaused) yield return null;
@@ -572,18 +642,52 @@ public class ChatFlowController : MonoBehaviour
 
     private IEnumerator AnimateDock(Vector2 targetPos)
     {
+        // ตำแหน่งเริ่มต้นของ inputDock
         Vector2 start = inputDock.anchoredPosition;
+
+        // ถ้ามี ScrollView ให้จำตำแหน่งเริ่มต้นไว้
+        Vector2 scrollStart = Vector2.zero;
+        Vector2 scrollTarget = Vector2.zero;
+
+        bool hasScrollView = inputDock_ScrollView != null;
+        if (hasScrollView)
+        {
+            scrollStart = inputDock_ScrollView.anchoredPosition;
+
+            // ให้มันขยับด้วย delta เท่ากับ inputDock
+            Vector2 delta = targetPos - start;          // เช่น inputDock ขยับขึ้น 10
+            scrollTarget = scrollStart + delta;         // ScrollView ก็ขยับขึ้น 10 เหมือนกัน
+        }
+
         float t = 0f;
         while (t < dockAnimDuration)
         {
             while (isPaused) yield return null;
+
             t += Time.unscaledDeltaTime;
             float k = dockCurve.Evaluate(Mathf.Clamp01(t / dockAnimDuration));
-            inputDock.anchoredPosition = Vector2.LerpUnclamped(start, targetPos, k);
+
+            // ขยับ inputDock
+            Vector2 dockPos = Vector2.LerpUnclamped(start, targetPos, k);
+            inputDock.anchoredPosition = dockPos;
+
+            // ขยับ ScrollView ตามด้วยระยะเท่ากัน
+            if (hasScrollView)
+            {
+                Vector2 scrollPos = Vector2.LerpUnclamped(scrollStart, scrollTarget, k);
+                inputDock_ScrollView.anchoredPosition = scrollPos;
+            }
+
             yield return null;
         }
+
+        // จบแอนิเมชัน → เซ็ตให้ตรงเป๊ะ
         inputDock.anchoredPosition = targetPos;
+
+        if (hasScrollView)
+            inputDock_ScrollView.anchoredPosition = scrollTarget;
     }
+
 
     private bool NextSlotHasMultiChoices(int nextStep)
     {
