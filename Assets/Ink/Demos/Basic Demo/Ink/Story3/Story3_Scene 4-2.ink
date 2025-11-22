@@ -9,6 +9,12 @@
 
 เพียงเท่านี้ ค่าไฟที่แพงกวนใจคุณก็จะหายไปเสียที
 
-# show_panel:โอน
+-> ToTransfer
+== ToTransfer ==
+# show_panel:Transfer1
+
+-> ToTransfer2
+== ToTransfer2 ==
+# show_panel:Transfer2
 
 -> END
