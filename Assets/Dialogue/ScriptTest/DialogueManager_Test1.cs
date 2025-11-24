@@ -229,13 +229,32 @@ public class DialogueManager_Test1 : MonoBehaviour
         ContinueStory();
     }
 
+    // [NEW FUNCTION] จัดการการเปิด/ปิด Panel พร้อม Transition (ต้องมี PanelTransitioner.cs)
+    private void SetPanelStateWithTransition(GameObject panel, bool shouldShow, string transitionType)
+    {
+        // ต้องแน่ใจว่า PanelTransitioner.cs ถูกแนบกับ Panel นี้
+        PanelTransitioner pt = panel.GetComponent<PanelTransitioner>();
 
+        if (pt != null)
+        {
+            // เรียก ShowPanel/HidePanel พร้อมส่งประเภท Transition ที่มาจาก Ink Tag
+            if (shouldShow)
+                pt.ShowPanel(transitionType);
+            else
+                pt.HidePanel(transitionType);
+        }
+        else
+        {
+            // Fallback: หากไม่มี PanelTransitioner ให้ใช้ SetActive ทันที
+            panel.SetActive(shouldShow);
+        }
+    }
     private void HandleTag(string tag)
     {
         if (tag.StartsWith("load_ink:"))
         {
             string inkName = tag.Substring("load_ink:".Length).Trim();
-
+            // ... (โค้ด load_ink: เหมือนเดิม) ...
             if (pendingInkToLoad != inkName)
             {
                 pendingInkToLoad = inkName;
@@ -246,11 +265,17 @@ public class DialogueManager_Test1 : MonoBehaviour
 
         if (tag.StartsWith("show_panel:"))
         {
-            string panelName = tag.Substring("show_panel:".Length);
+            string fullParam = tag.Substring("show_panel:".Length);
+            string[] parts = fullParam.Split(':'); // แยกเป็น [ชื่อ Panel, Transition Type]
+            string panelName = parts[0].Trim();
+            string transitionType = parts.Length > 1 ? parts[1].Trim() : "instant"; // ค่าเริ่มต้นคือ instant
+
             if (panelDict.TryGetValue(panelName, out GameObject panel))
             {
-                panel.SetActive(true);
-                Debug.Log("Opened panel: " + panelName);
+                // **[แก้ไข]** เรียกใช้ฟังก์ชันใหม่
+                SetPanelStateWithTransition(panel, true, transitionType);
+
+                Debug.Log($"Opened panel: {panelName} with transition: {transitionType}");
 
                 if (panelName.StartsWith("Chat"))
                 {
@@ -261,19 +286,31 @@ public class DialogueManager_Test1 : MonoBehaviour
             {
                 Debug.LogWarning("No panel found: " + panelName);
             }
-            return;
+            return; // ออกจากฟังก์ชันหลังจากจัดการ show_panel:
         }
 
         if (tag.StartsWith("hide_panel:"))
         {
-            string panelName = tag.Substring("hide_panel:".Length);
+            string fullParam = tag.Substring("hide_panel:".Length);
+            string[] parts = fullParam.Split(':'); // แยกเป็น [ชื่อ Panel, Transition Type]
+            string panelName = parts[0].Trim();
+            string transitionType = parts.Length > 1 ? parts[1].Trim() : "instant"; // ค่าเริ่มต้นคือ instant
+
             if (panelDict.TryGetValue(panelName, out GameObject panel))
             {
-                panel.SetActive(false);
-                Debug.Log("Closed panel: " + panelName);
+                // **[แก้ไข]** เรียกใช้ฟังก์ชันใหม่
+                SetPanelStateWithTransition(panel, false, transitionType);
+
+                Debug.Log($"Closed panel: {panelName} with transition: {transitionType}");
             }
-            return;
+            else
+            {
+                Debug.LogWarning("No panel found: " + panelName);
+            }
+            return; // ออกจากฟังก์ชันหลังจากจัดการ hide_panel:
         }
+
+        // **[โค้ดเดิม]** จัดการ Sound Manager และ Unhandled Tag
         if (SoundManager_Test1.instance != null)
         {
             SoundManager_Test1.instance.HandleSoundTag(tag);

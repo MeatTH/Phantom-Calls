@@ -54,7 +54,7 @@ public class SoundManager_Test1 : MonoBehaviour
         {
             StopBGM();
         }
-        else if (tag.StartsWith("play_sound:"))
+        if (tag.StartsWith("play_sound:"))
         {
             string name = tag.Substring("play_sound:".Length).Trim();
             PlaySFX(name);
