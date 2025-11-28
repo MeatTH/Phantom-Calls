@@ -672,6 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundPanel: {fileID: 1824883223}
   volumeSlider: {fileID: 1997471803}
+  bgmSource: {fileID: 0}
 --- !u!4 &478898506
 Transform:
   m_ObjectHideFlags: 0
@@ -1214,7 +1215,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\u0E43\u0E19\u0E42\u0E25\u0E01\u0E17\u0E35\u0E48\u0E40\u0E2A\u0E35\u0E22\u0E07\u0E1B\u0E25\u0E32\u0E22\u0E2A\u0E32\u0E22\u0E44\u0E21\u0E48\u0E43\u0E0A\u0E48\u0E40\u0E1E\u0E35\u0E22\u0E07\u0E16\u0E49\u0E2D\u0E22\u0E04\u0E33\u0E18\u0E23\u0E23\u0E21\u0E14\u0E32\n\n\u0E17\u0E27\u0E48\u0E32\u0E41\u0E1D\u0E07\u0E44\u0E1B\u0E14\u0E49\u0E27\u0E22\u0E01\u0E31\u0E1A\u0E14\u0E31\u0E01\u0E2D\u0E31\u0E19\u0E41\u0E22\u0E1A\u0E22\u0E25\n\n\u0E04\u0E38\u0E13\u0E08\u0E30\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E40\u0E0A\u0E37\u0E48\u0E2D\u0E40\u0E2A\u0E35\u0E22\u0E07\u0E19\u0E31\u0E49\u0E19
-    \u0E2B\u0E23\u0E37\u0E2D\u0E08\u0E30\u0E21\u0E31\u0E48\u0E19\u0E04\u0E07\u0E08\u0E32\u0E01\u0E40\u0E2A\u0E35\u0E22\u0E07\u0E43\u0E19\u0E43\u0E08?"
+    \u0E2B\u0E23\u0E37\u0E2D\u0E08\u0E30\u0E40\u0E0A\u0E37\u0E48\u0E2D\u0E21\u0E31\u0E48\u0E19\u0E15\u0E31\u0E27\u0E40\u0E2D\u0E07?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
   m_sharedMaterial: {fileID: 3860213594383427902, guid: 37ac1d2cc1a1765499b0ca8717bcdaee, type: 2}
@@ -1437,6 +1438,8 @@ MonoBehaviour:
   menuMusic: {fileID: 8300000, guid: 43bcc3d7e0b8baa4f89e0c9ccbc8acf1, type: 3}
   scenesToStopMusic:
   - Story1
+  - Story2
+  - Story3
 --- !u!4 &833042195
 Transform:
   m_ObjectHideFlags: 0

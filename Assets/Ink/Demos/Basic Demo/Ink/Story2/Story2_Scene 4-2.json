@@ -1,0 +1,1 @@
+﻿{"inkVersion":21,"root":[[{"->":"ToTransfer"},["done",{"#f":5,"#n":"g-0"}],null],"done",{"ToTransfer":["#","^show_panel:Transfer1","/#",{"->":"ToTransfer2"},{"#f":1}],"ToTransfer2":["#","^show_panel:Transfer2","/#","^จ่าย","\n","#","^hide_panel:Transfer1","/#","end",{"#f":1}],"#f":1}],"listDefs":{}}

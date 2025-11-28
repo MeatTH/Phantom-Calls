@@ -35,8 +35,8 @@ public class ChatFlowController : MonoBehaviour
         public float npcInterval = 0.8f;
         public ChoiceSet choice;
 
-        // ===== เพิ่มตัวแปรนี้ =====
-        [Header("Exit/Jump after NPC bubbles")]
+        // ===== เพิ่มตัวแปรนี้ =====
+        [Header("Exit/Jump after NPC bubbles")]
         [Tooltip("ถ้าติ๊ก, จะจบ Chat Flow ทันทีหลัง NPC พูดจบ (แทนการแสดง Choice)")]
         public bool finishAfterNpc = false;
     }
@@ -61,15 +61,15 @@ public class ChatFlowController : MonoBehaviour
         public int nextStep = -1;
         public DockPos dockOverride = DockPos.Pos0;
 
-        // ===== เพิ่ม 3 ตัวแปรนี้ =====
-        [Header("Direct Exit/Jump Settings")]
+        // ===== เพิ่ม 3 ตัวแปรนี้ =====
+        [Header("Direct Exit/Jump Settings")]
         [Tooltip("ถ้าติ๊ก, จะข้ามการพิมพ์พรีวิวและกดส่งทันที")]
         public bool instantExitAndJump = false;
 
         [Tooltip("ถ้าต้องการโหลด Ink ใหม่: ใส่ชื่อไฟล์ Ink (เว้นว่างเพื่อใช้ Story เดิม)")]
         public string inkNameToLoadOnExit = ""; // <--- เพิ่มตัวแปรนี้
 
-        [Tooltip("ชื่อ Knot หรือ Stitch ที่ต้องการ Jump ไป")]
+        [Tooltip("ชื่อ Knot หรือ Stitch ที่ต้องการ Jump ไป")]
         public string jumpToKnotOnExit = "";
     }
 
@@ -109,14 +109,14 @@ public class ChatFlowController : MonoBehaviour
     [Header("อนุญาตให้เปลี่ยนช้อยได้ก่อนกดส่ง")]
     public bool allowChangeBeforeSend = true;
 
-    // ====== State ======
-    private int currentSlotIndex = 0;
-    private bool isPreviewBusy = false;          // อยู่ในโหมดพรีวิว/รอส่ง
-    private ChoiceOption _pendingChoice = null;  /// ตัวเลือก “ล่าสุด” ที่จะถูกส่ง
-    private Coroutine _dockAnimCo;
-    private Coroutine _typingCo;                 // ควบคุม coroutine พิมพ์พรีวิว
+    // ====== State ======
+    private int currentSlotIndex = 0;
+    private bool isPreviewBusy = false;          // อยู่ในโหมดพรีวิว/รอส่ง
+    private ChoiceOption _pendingChoice = null;  /// ตัวเลือก “ล่าสุด” ที่จะถูกส่ง
+    private Coroutine _dockAnimCo;
+    private Coroutine _typingCo;                 // ควบคุม coroutine พิมพ์พรีวิว
 
-    private void Start()
+    private void Start()
     {
         panelWasActive = (chatPanel != null && chatPanel.activeInHierarchy);
         if (panelWasActive && !flowStarted) BeginFlow();
@@ -182,17 +182,17 @@ public class ChatFlowController : MonoBehaviour
         }
 
         var slot = timeline[currentSlotIndex];
-        // ไม่ต้องมีตรรกะ if (slot.finishAfterNpc) { ... } ที่นี่อีก
+        // ไม่ต้องมีตรรกะ if (slot.finishAfterNpc) { ... } ที่นี่อีก
 
-        StartCoroutine(RevealNpcAuto(slot));
+        StartCoroutine(RevealNpcAuto(slot));
     }
 
     private IEnumerator RevealNpcAuto(Slot slot)
     {
         while (isPaused) yield return null;
 
-        // ถ้าสล็อตนี้มีข้อความ NPC → ลดแถบทันที (กันเคสเข้ามาสล็อตนี้โดยตรง)
-        if (slot.npcMessagePrefabs != null && slot.npcMessagePrefabs.Count > 0)
+        // ถ้าสล็อตนี้มีข้อความ NPC → ลดแถบทันที (กันเคสเข้ามาสล็อตนี้โดยตรง)
+        if (slot.npcMessagePrefabs != null && slot.npcMessagePrefabs.Count > 0)
             RaiseInputDock(false);
 
         if (slot.npcMessagePrefabs != null && slot.npcMessagePrefabs.Count > 0)
@@ -205,10 +205,10 @@ public class ChatFlowController : MonoBehaviour
             }
         }
 
-        // **ลบตรรกะ finishAfterNpc ออกจากตรงนี้**
-        // เราจะปล่อยให้ Coroutine จบ แล้ว TryShowChoices จะถูกเรียกเสมอ
+        // **ลบตรรกะ finishAfterNpc ออกจากตรงนี้**
+        // เราจะปล่อยให้ Coroutine จบ แล้ว TryShowChoices จะถูกเรียกเสมอ
 
-        TryShowChoices(slot);
+        TryShowChoices(slot);
     }
 
 
@@ -227,38 +227,38 @@ public class ChatFlowController : MonoBehaviour
     {
         HideAllChoiceButtons();
 
-        // 1. ถ้า Slot ถูกกำหนดให้จบ Flow (NPC พูดจบ = จบ Branch)
-        if (slot.finishAfterNpc)
+        // 1. ถ้า Slot ถูกกำหนดให้จบ Flow (NPC พูดจบ = จบ Branch)
+        if (slot.finishAfterNpc)
         {
-            // บังคับจบ Flow เพื่อแสดง Next Button
-            currentSlotIndex = timeline.Count; // ตั้ง Index ให้เกินขอบเขต
-            RunCurrentSlot();                  // เรียกซ้ำเพื่อให้ Next Button ปรากฏ
-            return;
+            // บังคับจบ Flow เพื่อแสดง Next Button
+            currentSlotIndex = timeline.Count; // ตั้ง Index ให้เกินขอบเขต
+            RunCurrentSlot();                  // เรียกซ้ำเพื่อให้ Next Button ปรากฏ
+            return;
         }
 
-        // 2. ถ้า Slot นี้มี Choice ให้แสดง Choice ต่อ (ตรรกะเดิม)
-        if (slot.choice != null && slot.choice.options != null && slot.choice.options.Count > 0)
+        // 2. ถ้า Slot นี้มี Choice ให้แสดง Choice ต่อ (ตรรกะเดิม)
+        if (slot.choice != null && slot.choice.options != null && slot.choice.options.Count > 0)
         {
             if (choicesPanel) choicesPanel.SetActive(true);
             RaiseInputDock(true);
 
-            // ... (โค้ดการแสดงปุ่มช้อยส์เหมือนเดิม) ...
-            for (int i = 0; i < choiceDockButtons.Length; i++)
+            // ... (โค้ดการแสดงปุ่มช้อยส์เหมือนเดิม) ...
+            for (int i = 0; i < choiceDockButtons.Length; i++)
                 if (choiceDockButtons[i] != null)
                     choiceDockButtons[i].onClick.RemoveAllListeners();
 
             foreach (var opt in slot.choice.options)
             {
-                // ... (โค้ดการตั้งค่าปุ่มเหมือนเดิม) ...
-                int dock = (int)opt.dockOverride;
+                // ... (โค้ดการตั้งค่าปุ่มเหมือนเดิม) ...
+                int dock = (int)opt.dockOverride;
                 if (dock < 0 || dock >= choiceDockButtons.Length) continue;
                 var btn = choiceDockButtons[dock];
                 if (btn == null) continue;
 
                 var label = btn.GetComponentInChildren<TMP_Text>();
                 if (label) label.text =
-                    !string.IsNullOrWhiteSpace(opt.buttonText) ? opt.buttonText :
-                    (!string.IsNullOrWhiteSpace(opt.previewTextOverride) ? opt.previewTextOverride : "เลือก");
+                  !string.IsNullOrWhiteSpace(opt.buttonText) ? opt.buttonText :
+                  (!string.IsNullOrWhiteSpace(opt.previewTextOverride) ? opt.previewTextOverride : "เลือก");
 
                 btn.gameObject.SetActive(true);
 
@@ -267,8 +267,8 @@ public class ChatFlowController : MonoBehaviour
                 btn.onClick.AddListener(() => OnChoiceClicked(capturedSet, capturedOpt));
             }
         }
-        // 3. ถ้าไม่มี Choice และไม่ถูกกำหนดให้จบ (ใช้พฤติกรรมเดิม: ไป Slot ถัดไป)
-        else
+        // 3. ถ้าไม่มี Choice และไม่ถูกกำหนดให้จบ (ใช้พฤติกรรมเดิม: ไป Slot ถัดไป)
+        else
         {
             GoToNextStep(-1);
             return;
@@ -279,44 +279,44 @@ public class ChatFlowController : MonoBehaviour
     {
 
 
-        // อนุญาตให้เปลี่ยนช้อยได้เสมอ: ไม่ล็อกปุ่ม, ไม่ซ่อนปุ่มที่เหลือ
-        if (!allowChangeBeforeSend)
+        // อนุญาตให้เปลี่ยนช้อยได้เสมอ: ไม่ล็อกปุ่ม, ไม่ซ่อนปุ่มที่เหลือ
+        if (!allowChangeBeforeSend)
         {
             if (isPreviewBusy)
                 return; // โหมดเดิม: ไม่ให้เปลี่ยนถ้ายังไม่ส่ง
-            if (set.destroyOthersOnPick) HideAllChoiceButtons();
+            if (set.destroyOthersOnPick) HideAllChoiceButtons();
             else SetAllChoiceButtonsInteractable(false);
         }
         else
         {
-            // โหมดใหม่: ปุ่มอื่นยังกดได้อยู่
-            SetAllChoiceButtonsInteractable(true);
+            // โหมดใหม่: ปุ่มอื่นยังกดได้อยู่
+            SetAllChoiceButtonsInteractable(true);
         }
 
         if (opt.instantExitAndJump)
         {
-            // ถ้าเป็น Instant Jump: ข้าม Preview/Send และดำเนินการ Exit ทันที
-            _pendingChoice = opt;
+            // ถ้าเป็น Instant Jump: ข้าม Preview/Send และดำเนินการ Exit ทันที
+            _pendingChoice = opt;
             if (set.destroyOthersOnPick) HideAllChoiceButtons();
 
-            // เรียก Coroutine ออก/กระโดดทันที
-            StartCoroutine(InstantExitAndJumpCo());
+            // เรียก Coroutine ออก/กระโดดทันที
+            StartCoroutine(InstantExitAndJumpCo());
             return;
         }
 
 
         if (opt == null || opt.playerMessagePrefab == null) return;
 
-        // เข้าสู่โหมดพรีวิว (ถ้ายังไม่เข้า)
-        isPreviewBusy = true;
+        // เข้าสู่โหมดพรีวิว (ถ้ายังไม่เข้า)
+        isPreviewBusy = true;
 
 
-        // หยุดพิมพ์เดิม (ถ้ามี), เริ่มพิมพ์ใหม่ตามช้อย “ล่าสุด”
-        if (_typingCo != null) StopCoroutine(_typingCo);
+        // หยุดพิมพ์เดิม (ถ้ามี), เริ่มพิมพ์ใหม่ตามช้อย “ล่าสุด”
+        if (_typingCo != null) StopCoroutine(_typingCo);
 
         string txt =
-            !string.IsNullOrWhiteSpace(opt.previewTextOverride) ? opt.previewTextOverride.Trim() :
-            (!string.IsNullOrWhiteSpace(opt.buttonText) ? opt.buttonText : "");
+          !string.IsNullOrWhiteSpace(opt.previewTextOverride) ? opt.previewTextOverride.Trim() :
+          (!string.IsNullOrWhiteSpace(opt.buttonText) ? opt.buttonText : "");
 
         _typingCo = StartCoroutine(PreviewTypingThenEnableSend(txt, opt));
     }
@@ -336,7 +336,7 @@ public class ChatFlowController : MonoBehaviour
         _pendingChoice = opt;
         if (sendButton) sendButton.gameObject.SetActive(true);
         _typingCo = null; // พิมพ์เสร็จ
-    }
+    }
 
     private void OnSendClicked()
     {
@@ -349,17 +349,17 @@ public class ChatFlowController : MonoBehaviour
     {
         if (_pendingChoice == null) yield break;
 
-        // 1. ซ่อนปุ่มเลือกและ Input Dock
-        HideAllChoiceButtons();
+        // 1. ซ่อนปุ่มเลือกและ Input Dock
+        HideAllChoiceButtons();
         if (choicesPanel) choicesPanel.SetActive(false);
         RaiseInputDock(false);
         yield return WaitWithPause(dockAnimDuration);
 
-        // 2. ปิด Chat Panel และ Jump Ink
-        if (chatPanel != null) chatPanel.SetActive(false);
+        // 2. ปิด Chat Panel และ Jump Ink
+        if (chatPanel != null) chatPanel.SetActive(false);
 
         string inkName = _pendingChoice.inkNameToLoadOnExit; // <--- ดึงชื่อไฟล์ Ink
-        string knot = _pendingChoice.jumpToKnotOnExit;
+        string knot = _pendingChoice.jumpToKnotOnExit;
 
         _pendingChoice = null;
         isPreviewBusy = false;
@@ -367,17 +367,17 @@ public class ChatFlowController : MonoBehaviour
         var dlg = DialogueManager_Test1.GetInstance();
         if (dlg != null)
         {
-            // ตรวจสอบว่ามีการกำหนด Ink File หรือ Knot หรือไม่
-            if (!string.IsNullOrEmpty(inkName) || !string.IsNullOrEmpty(knot))
+            // ตรวจสอบว่ามีการกำหนด Ink File หรือ Knot หรือไม่
+            if (!string.IsNullOrEmpty(inkName) || !string.IsNullOrEmpty(knot))
             {
-                // ถ้ามี inkNameToLoad: จะโหลด Ink ใหม่และ Jump Knot (ถ้ามี)
-                // ถ้าไม่มี inkNameToLoad แต่มี jumpToKnot: จะ Jump ใน Story เดิม
-                dlg.LoadNewInkAndJump(inkName, knot);
+                // ถ้ามี inkNameToLoad: จะโหลด Ink ใหม่และ Jump Knot (ถ้ามี)
+                // ถ้าไม่มี inkNameToLoad แต่มี jumpToKnot: จะ Jump ใน Story เดิม
+                dlg.LoadNewInkAndJump(inkName, knot);
             }
             else
             {
-                // ถ้าไม่มีการตั้งค่า Jump/Load เลย: จบ Chat และ Continue Story เดิม
-                dlg.OnChatFinished();
+                // ถ้าไม่มีการตั้งค่า Jump/Load เลย: จบ Chat และ Continue Story เดิม
+                dlg.OnChatFinished();
             }
         }
     }
@@ -389,8 +389,8 @@ public class ChatFlowController : MonoBehaviour
 
         int next = _pendingChoice.nextStep;
 
-        // ถ้าสล็อตถัดไปเริ่มด้วย NPC → ลดแถบลง, ไม่งั้นคงแถบไว้ (เพราะจะเป็นเทิร์นผู้เล่นอีก)
-        bool nextIsNpc = NextSlotStartsWithNpc(next);
+        // ถ้าสล็อตถัดไปเริ่มด้วย NPC → ลดแถบลง, ไม่งั้นคงแถบไว้ (เพราะจะเป็นเทิร์นผู้เล่นอีก)
+        bool nextIsNpc = NextSlotStartsWithNpc(next);
         if (nextIsNpc)
         {
             RaiseInputDock(false);
@@ -399,7 +399,7 @@ public class ChatFlowController : MonoBehaviour
         else
         {
             yield return null; // คงแถบไว้
-        }
+        }
 
         if (sendButton) sendButton.gameObject.SetActive(false);
 
@@ -417,24 +417,24 @@ public class ChatFlowController : MonoBehaviour
     {
         HideAllChoiceButtons();
 
-        // 1. หา Index ของ Slot เป้าหมาย
-        if (branchNextStep >= 0)
+        // 1. หา Index ของ Slot เป้าหมาย
+        if (branchNextStep >= 0)
         {
             int idx = timeline.FindIndex(s => s.step == branchNextStep);
             currentSlotIndex = (idx >= 0) ? idx : currentSlotIndex + 1;
         }
         else
         {
-            // ถ้าเป็น -1 (จาก TryShowChoices) ให้ไป Slot ถัดไปตาม Index ปกติ
-            currentSlotIndex++;
+            // ถ้าเป็น -1 (จาก TryShowChoices) ให้ไป Slot ถัดไปตาม Index ปกติ
+            currentSlotIndex++;
         }
 
-        // 2. รัน Slot ใหม่
-        RunCurrentSlot();
+        // 2. รัน Slot ใหม่
+        RunCurrentSlot();
     }
 
-    // ===== Utilities =====
-    private void SpawnBubble(GameObject prefab)
+    // ===== Utilities =====
+    private void SpawnBubble(GameObject prefab)
     {
         if (prefab == null || chatContentRoot == null) return;
 
@@ -444,15 +444,15 @@ public class ChatFlowController : MonoBehaviour
         if (!string.IsNullOrEmpty(sfxPopName) && SoundManager_Test1.instance != null)
             SoundManager_Test1.instance.PlaySFX(sfxPopName);
 
-        // เดิม: ScrollToBottomStabilized();
-        if (scrollRect != null)
+        // เดิม: ScrollToBottomStabilized();
+        if (scrollRect != null)
         {
             var rt = go.GetComponent<RectTransform>();
             if (rt != null)
                 StartCoroutine(ScrollToRevealBubble(rt));
             else
                 StartCoroutine(ScrollToBottomStabilized()); // กันพลาด ถ้าไม่มี RectTransform
-        }
+        }
 
         StartCoroutine(CheckSpawnTriggers(prefab));
     }
@@ -479,23 +479,23 @@ public class ChatFlowController : MonoBehaviour
                     {
                         bool willLoadNew = !string.IsNullOrEmpty(trg.inkNameToLoad);
 
-                        // ===== START FIX / แก้ไขเริ่มตรงนี้ =====
-                        if (willLoadNew)
+                        // ===== START FIX / แก้ไขเริ่มตรงนี้ =====
+                        if (willLoadNew)
                         {
-                            // 1. โหลด Ink ใหม่: ถ้าใส่ชื่อไฟล์ Ink จะโหลดไฟล์ใหม่และกระโดด Knot (ถ้ามี)
-                            dlg.LoadNewInkAndJump(trg.inkNameToLoad, trg.jumpToKnot);
+                            // 1. โหลด Ink ใหม่: ถ้าใส่ชื่อไฟล์ Ink จะโหลดไฟล์ใหม่และกระโดด Knot (ถ้ามี)
+                            dlg.LoadNewInkAndJump(trg.inkNameToLoad, trg.jumpToKnot);
                         }
                         else
                         {
-                            // 2. ใช้ Ink เดิม: ถ้าไม่ได้ใส่ชื่อไฟล์ Ink จะกระโดด Knot ใน Story เดิม หรือ Continue
-                            dlg.EnsureOpen();
+                            // 2. ใช้ Ink เดิม: ถ้าไม่ได้ใส่ชื่อไฟล์ Ink จะกระโดด Knot ใน Story เดิม หรือ Continue
+                            dlg.EnsureOpen();
                             if (!string.IsNullOrEmpty(trg.jumpToKnot))
                                 dlg.JumpToKnot(trg.jumpToKnot);
                             else
                                 dlg.ContinueStory();
                         }
-                        // ===== END FIX / แก้ไขจบตรงนี้ =====
-                    }
+                        // ===== END FIX / แก้ไขจบตรงนี้ =====
+                    }
                 }
                 break;
             }
@@ -536,19 +536,19 @@ public class ChatFlowController : MonoBehaviour
         var content = scrollRect.content;
         if (content == null) yield break;
 
-        // ใช้ viewport ถ้ามี ไม่งั้นใช้ตัว ScrollRect เอง
-        RectTransform viewport = scrollRect.viewport != null
-            ? scrollRect.viewport
-            : (RectTransform)scrollRect.transform;
+        // ใช้ viewport ถ้ามี ไม่งั้นใช้ตัว ScrollRect เอง
+        RectTransform viewport = scrollRect.viewport != null
+      ? scrollRect.viewport
+      : (RectTransform)scrollRect.transform;
 
-        // รอให้ layout คำนวณเสร็จก่อน (อย่างน้อย 1–2 เฟรม)
-        while (isPaused) yield return null;
+        // รอให้ layout คำนวณเสร็จก่อน (อย่างน้อย 1–2 เฟรม)
+        while (isPaused) yield return null;
         yield return null;
         yield return new WaitForEndOfFrame();
         LayoutRebuilder.ForceRebuildLayoutImmediate(content);
 
-        // คำนวณตำแหน่งของ bubble และ viewport ใน local space ของ content
-        Vector3[] viewWorld = new Vector3[4];
+        // คำนวณตำแหน่งของ bubble และ viewport ใน local space ของ content
+        Vector3[] viewWorld = new Vector3[4];
         Vector3[] targetWorld = new Vector3[4];
         viewport.GetWorldCorners(viewWorld);
         target.GetWorldCorners(targetWorld);
@@ -558,24 +558,24 @@ public class ChatFlowController : MonoBehaviour
         Vector3 bubbleBottomInContent = content.InverseTransformPoint(targetWorld[0]);
         Vector3 bubbleTopInContent = content.InverseTransformPoint(targetWorld[1]);
 
-        // หาว่า bubble ล้นออกนอกกรอบไหม แล้วต้องขยับ content เท่าไหร่
-        float offsetY = 0f;
-        float margin = 20f; // ระยะ padding จากขอบล่าง/บน อยากได้เท่าไหร่ลองปรับได้
+        // หาว่า bubble ล้นออกนอกกรอบไหม แล้วต้องขยับ content เท่าไหร่
+        float offsetY = 0f;
+        float margin = 10f; // ระยะ padding จากขอบล่าง/บน อยากได้เท่าไหร่ลองปรับได้
 
-        // ถ้าก้น bubble ต่ำกว่าก้น viewport → เลื่อนขึ้น
-        if (bubbleBottomInContent.y < viewBottomInContent.y)
+        // ถ้าก้น bubble ต่ำกว่าก้น viewport → เลื่อนขึ้น
+        if (bubbleBottomInContent.y < viewBottomInContent.y)
         {
             offsetY = (viewBottomInContent.y + margin) - bubbleBottomInContent.y;
         }
-        // ถ้าหัว bubble สูงกว่าหัว viewport → เลื่อนลง
-        else if (bubbleTopInContent.y > viewTopInContent.y)
+        // ถ้าหัว bubble สูงกว่าหัว viewport → เลื่อนลง
+        else if (bubbleTopInContent.y > viewTopInContent.y)
         {
             offsetY = (viewTopInContent.y - margin) - bubbleTopInContent.y;
         }
 
 
-        // ถ้าปกติ bubble อยู่ในกรอบอยู่แล้ว → ไม่ต้องเลื่อน
-        if (Mathf.Approximately(offsetY, 0f)) yield break;
+        // ถ้าปกติ bubble อยู่ในกรอบอยู่แล้ว → ไม่ต้องเลื่อน
+        if (Mathf.Approximately(offsetY, 0f)) yield break;
 
         Vector2 startPos = content.anchoredPosition;
         Vector2 targetPos = startPos + new Vector2(0f, offsetY);
@@ -642,11 +642,11 @@ public class ChatFlowController : MonoBehaviour
 
     private IEnumerator AnimateDock(Vector2 targetPos)
     {
-        // ตำแหน่งเริ่มต้นของ inputDock
-        Vector2 start = inputDock.anchoredPosition;
+        // ตำแหน่งเริ่มต้นของ inputDock
+        Vector2 start = inputDock.anchoredPosition;
 
-        // ถ้ามี ScrollView ให้จำตำแหน่งเริ่มต้นไว้
-        Vector2 scrollStart = Vector2.zero;
+        // ถ้ามี ScrollView ให้จำตำแหน่งเริ่มต้นไว้
+        Vector2 scrollStart = Vector2.zero;
         Vector2 scrollTarget = Vector2.zero;
 
         bool hasScrollView = inputDock_ScrollView != null;
@@ -654,10 +654,10 @@ public class ChatFlowController : MonoBehaviour
         {
             scrollStart = inputDock_ScrollView.anchoredPosition;
 
-            // ให้มันขยับด้วย delta เท่ากับ inputDock
-            Vector2 delta = targetPos - start;          // เช่น inputDock ขยับขึ้น 10
-            scrollTarget = scrollStart + delta;         // ScrollView ก็ขยับขึ้น 10 เหมือนกัน
-        }
+            // ให้มันขยับด้วย delta เท่ากับ inputDock
+            Vector2 delta = targetPos - start;          // เช่น inputDock ขยับขึ้น 10
+            scrollTarget = scrollStart + delta;         // ScrollView ก็ขยับขึ้น 10 เหมือนกัน
+        }
 
         float t = 0f;
         while (t < dockAnimDuration)
@@ -667,12 +667,12 @@ public class ChatFlowController : MonoBehaviour
             t += Time.unscaledDeltaTime;
             float k = dockCurve.Evaluate(Mathf.Clamp01(t / dockAnimDuration));
 
-            // ขยับ inputDock
-            Vector2 dockPos = Vector2.LerpUnclamped(start, targetPos, k);
+            // ขยับ inputDock
+            Vector2 dockPos = Vector2.LerpUnclamped(start, targetPos, k);
             inputDock.anchoredPosition = dockPos;
 
-            // ขยับ ScrollView ตามด้วยระยะเท่ากัน
-            if (hasScrollView)
+            // ขยับ ScrollView ตามด้วยระยะเท่ากัน
+            if (hasScrollView)
             {
                 Vector2 scrollPos = Vector2.LerpUnclamped(scrollStart, scrollTarget, k);
                 inputDock_ScrollView.anchoredPosition = scrollPos;
@@ -681,8 +681,8 @@ public class ChatFlowController : MonoBehaviour
             yield return null;
         }
 
-        // จบแอนิเมชัน → เซ็ตให้ตรงเป๊ะ
-        inputDock.anchoredPosition = targetPos;
+        // จบแอนิเมชัน → เซ็ตให้ตรงเป๊ะ
+        inputDock.anchoredPosition = targetPos;
 
         if (hasScrollView)
             inputDock_ScrollView.anchoredPosition = scrollTarget;
@@ -691,9 +691,9 @@ public class ChatFlowController : MonoBehaviour
 
     private bool NextSlotHasMultiChoices(int nextStep)
     {
-        // หา index ของสล็อตถัดไปจริง ๆ
-        int idx = (nextStep >= 0) ? timeline.FindIndex(s => s.step == nextStep)
-                                  : currentSlotIndex + 1;
+        // หา index ของสล็อตถัดไปจริง ๆ
+        int idx = (nextStep >= 0) ? timeline.FindIndex(s => s.step == nextStep)
+                 : currentSlotIndex + 1;
         if (idx < 0 || idx >= timeline.Count) return false;
 
         var ch = timeline[idx].choice;
@@ -702,28 +702,28 @@ public class ChatFlowController : MonoBehaviour
 
     private bool NextSlotHasPlayerChoices(int nextStep)
     {
-        // หา index ของสล็อตถัดไปจริง ๆ
-        int idx = (nextStep >= 0)
-            ? timeline.FindIndex(s => s.step == nextStep)
-            : currentSlotIndex + 1;
+        // หา index ของสล็อตถัดไปจริง ๆ
+        int idx = (nextStep >= 0)
+      ? timeline.FindIndex(s => s.step == nextStep)
+      : currentSlotIndex + 1;
 
         if (idx < 0 || idx >= timeline.Count) return false;
 
         var ch = timeline[idx].choice;
         return ch != null && ch.options != null && ch.options.Count > 0; // ≥ 1 ตัวเลือก
-    }
+    }
 
     private bool NextSlotStartsWithNpc(int nextStep)
     {
-        // คำนวณ index ของสล็อตถัดไปจริง ๆ
-        int idx = (nextStep >= 0)
-            ? timeline.FindIndex(s => s.step == nextStep)
-            : currentSlotIndex + 1;
+        // คำนวณ index ของสล็อตถัดไปจริง ๆ
+        int idx = (nextStep >= 0)
+      ? timeline.FindIndex(s => s.step == nextStep)
+      : currentSlotIndex + 1;
 
         if (idx < 0 || idx >= timeline.Count) return false;
 
         var s = timeline[idx];
         return s.npcMessagePrefabs != null && s.npcMessagePrefabs.Count > 0; // NPC จะขึ้นก่อนเสมอ
-    }
+    }
 
 }

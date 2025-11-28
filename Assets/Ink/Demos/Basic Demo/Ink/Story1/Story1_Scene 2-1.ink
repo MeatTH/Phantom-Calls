@@ -5,7 +5,7 @@
 == Phone ==
 # show_panel:PhoneLock
 
-# show_panel:OnLock
+# show_panel:OnLock:fade
 
 “ไม้” คือลูกชายของคุณเขาไปทำงานที่กรุงเทพฯ ได้หลายปีแล้ว
 
@@ -22,7 +22,7 @@
 # play_sound:Unlock
 # show_panel:Chat2-1
 # hide_panel:PhoneLock
-# hide_panel:OnLock
+# hide_panel:OnLock:fade
 แสดงแชท
 # hide_panel:Chat2-1
 
