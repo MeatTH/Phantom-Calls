@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
@@ -11,15 +11,15 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        // ‚À≈¥§Ë“®“° PlayerPrefs À√◊Õ°”Àπ¥‡√‘Ë¡µÈπ
+        // ‡πÇ‡∏´‡∏•‡∏î‡∏Ñ‡πà‡∏≤‡∏à‡∏≤‡∏Å PlayerPrefs ‡∏´‡∏£‡∏∑‡∏≠‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô
         float savedVolume = PlayerPrefs.GetFloat(volumeKey, 1f);
         volumeSlider.value = savedVolume;
         AudioListener.volume = savedVolume;
 
-        // ‡™◊ËÕ¡ Event
+        // ‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏° Event
         volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
 
-        // ´ËÕπ Panel µÕπ‡√‘Ë¡
+        // ‡∏ã‡πà‡∏≠‡∏ô Panel ‡∏ï‡∏≠‡∏ô‡πÄ‡∏£‡∏¥‡πà‡∏°
         soundPanel.SetActive(false);
     }
 
