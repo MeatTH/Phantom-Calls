@@ -1,13 +1,10 @@
 
-# stop_bgm
-# hide_panel:BedRoom
+//# stop_bgm
+//# hide_panel:BedRoom
 ->Phone
 == Phone ==
-# show_panel:PhoneLock
+“ไม้” คือลูกชายของคุณเขาไปทำงานที่กรุงเทพฯ ได้หลายปีแล้ว #VOICE:บรรยาย-10 # hide_panel:BedRoom # show_panel:PhoneLock # show_panel:OnLock:fade
 
-# show_panel:OnLock:fade
-
-“ไม้” คือลูกชายของคุณเขาไปทำงานที่กรุงเทพฯ ได้หลายปีแล้ว #VOICE:บรรยาย-10
 
 
 //# play_sound:Line_message
@@ -19,12 +16,9 @@
 -->END
 
 == inPhone ==
-# play_sound:Unlock
-# show_panel:Chat2-1
-# hide_panel:PhoneLock
-# hide_panel:OnLock:fade
-แสดงแชท
-# hide_panel:Chat2-1
+# play_sound:Unlock # show_panel:Chat2-1 # hide_panel:PhoneLock # hide_panel:OnLock:fade
+//แสดงแชท
+//# hide_panel:Chat2-1
 
 -> Line
 

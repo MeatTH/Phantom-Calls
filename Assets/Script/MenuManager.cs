@@ -45,7 +45,7 @@ public class MenuManager : MonoBehaviour
         {
             SceneManager.LoadScene("Story2");
         }
-        else
+        else if (randomIndex == 2)
         {
             SceneManager.LoadScene("Story3");
         }

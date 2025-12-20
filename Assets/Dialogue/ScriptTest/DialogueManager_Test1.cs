@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
+using System.Text.RegularExpressions;
 
 public class DialogueManager_Test1 : MonoBehaviour
 {
@@ -61,6 +62,8 @@ public class DialogueManager_Test1 : MonoBehaviour
 
     private static DialogueManager_Test1 instance;
 
+    public string CurrentStoryBaseName { get; private set; }
+
     private void Awake()
     {
         if (instance != null)
@@ -115,11 +118,18 @@ public class DialogueManager_Test1 : MonoBehaviour
         // ตอนนี้การกดต่อใช้ปุ่ม/ระบบอื่น
     }
 
+    public string CurrentStoryName { get; private set; }
+
     // ========== ENTER / EXIT DIALOGUE ==========
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
         currentStory = new Story(inkJSON.text);
+        
+        // Parse Story Name (e.g. "Story1_Scene 1-1" -> "Story1")
+        CurrentStoryName = ParseStoryName(inkJSON.name);
+        Debug.Log("Current Story: " + CurrentStoryName);
+
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
         Debug.Log("dialoguePanel.SetActive(true)");
@@ -127,7 +137,29 @@ public class DialogueManager_Test1 : MonoBehaviour
         stateHistory.Clear();
         isRestoringFromHistory = false;
 
+        CurrentStoryBaseName = inkJSON.name;
+
         ContinueStory();
+    }
+
+    private string ParseStoryName(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName)) return "";
+
+        // Try Regex first: Matches "Story1", "Story2" at the start
+        var match = Regex.Match(fileName, @"^(Story\d+)", RegexOptions.IgnoreCase);
+        if (match.Success)
+        {
+            string result = match.Groups[1].Value;
+            // Ensure first letter is uppercase (Story1)
+            return char.ToUpper(result[0]) + result.Substring(1);
+        }
+        
+        // Fallback
+        string[] parts = fileName.Split('_');
+        string splitResult = parts.Length > 0 ? parts[0] : fileName;
+        Debug.Log($"ParseStoryName: Input='{fileName}' -> Output='{splitResult}'");
+        return splitResult;
     }
 
     private void ExitDialogueMode()
@@ -191,7 +223,7 @@ public class DialogueManager_Test1 : MonoBehaviour
         {
             HandleTag(tag);
             if (SoundManager_Test1.instance != null)
-                SoundManager_Test1.instance.HandleSoundTag(tag);
+                SoundManager_Test1.instance.HandleSoundTag(tag, CurrentStoryName);
         }
 
         // เตรียมข้อความสำหรับ typing + back
@@ -221,7 +253,8 @@ public class DialogueManager_Test1 : MonoBehaviour
             }
 
             isTyping = false;
-            dialogueText.text = currentLineRaw;
+            // dialogueText.text = currentLineRaw; // Text is already set in TypeText
+            dialogueText.maxVisibleCharacters = int.MaxValue; // Show all
 
             // แสดง choices ตามปกติของบรรทัดนี้
             DisplayChoices();
@@ -237,12 +270,30 @@ public class DialogueManager_Test1 : MonoBehaviour
             return;
         }
 
-        // 3) โหลด state ก่อนหน้าจาก history แล้วแสดงบรรทัดนั้นใหม่
-        string json = stateHistory[stateHistory.Count - 1];
-        stateHistory.RemoveAt(stateHistory.Count - 1);
+        // 3) Calculate logic to go back
+        string json = "";
+
+        if (stateHistory.Count > 1)
+        {
+            // If we have more than 1 history, it means we advanced at least once.
+            // The last entry is the state *before* the current line.
+            // But we want to go to the *previous* line.
+            // So we discard the last entry (current state) and load the one before it.
+            stateHistory.RemoveAt(stateHistory.Count - 1);
+            json = stateHistory[stateHistory.Count - 1]; 
+            Debug.Log($"[Back] Removing last state. New Count: {stateHistory.Count}. Loading index: {stateHistory.Count - 1}");
+        }
+        else // Count == 1
+        {
+            // If only 1 history (the start state), we just replay it.
+            // Do not remove it.
+            json = stateHistory[0];
+            Debug.Log("[Back] Replaying start state (Count=1).");
+        }
 
         try
         {
+            Debug.Log($"[Back] Loading JSON snapshot...");
             isRestoringFromHistory = true;
             currentStory.state.LoadJson(json);
             // ตอนนี้ currentStory อยู่ในสถานะ "ก่อนบรรทัดปัจจุบันหนึ่งก้าว"
@@ -270,6 +321,7 @@ public class DialogueManager_Test1 : MonoBehaviour
 
         string json = currentStory.state.ToJson();
         stateHistory.Add(json);
+        Debug.Log($"[SaveSnapshot] Saved state. History Count: {stateHistory.Count}");
 
         // จำกัดขนาด history กันเมมบวม
         if (stateHistory.Count > maxHistory)
@@ -446,11 +498,11 @@ public class DialogueManager_Test1 : MonoBehaviour
             return;
         }
 
-        // 5) แท็กอื่น ๆ → ให้ SoundManager ลองจัดการ
-        if (SoundManager_Test1.instance != null)
-        {
-            SoundManager_Test1.instance.HandleSoundTag(tag);
-        }
+        // 5) แท็กอื่น ๆ → ให้ SoundManager ลองจัดการ (REMOVED: ShowNextLine handles this globally)
+        // if (SoundManager_Test1.instance != null)
+        // {
+        //     SoundManager_Test1.instance.HandleSoundTag(tag, CurrentStoryBaseName);
+        // }
 
         Debug.Log("Unhandled tag: " + tag);
     }
@@ -510,6 +562,11 @@ public class DialogueManager_Test1 : MonoBehaviour
             return;
         }
         currentStory = new Story(selectedInk.text);
+        
+        // Update Story Name
+        CurrentStoryName = ParseStoryName(selectedInk.name);
+        Debug.Log("Current Story: " + CurrentStoryName);
+
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
@@ -517,19 +574,26 @@ public class DialogueManager_Test1 : MonoBehaviour
         isRestoringFromHistory = false;
         UpdateBackButtonVisibility();
 
+        waitingForChatToFinish = false;
         ContinueStory();
     }
 
     private IEnumerator TypeText(string text)
     {
         isTyping = true;
-        dialogueText.text = "";
+        dialogueText.text = text;
+        dialogueText.maxVisibleCharacters = 0;
 
-        foreach (char letter in text.ToCharArray())
+        // Iterate through length of text (mimics original timing)
+        // Note: text.Length might be larger than visible chars if there are tags, but ensures completion.
+        for (int i = 0; i <= text.Length; i++)
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
+        
+        // Ensure fully visible at the end
+        dialogueText.maxVisibleCharacters = int.MaxValue;
 
         isTyping = false;
         DisplayChoices();
@@ -554,6 +618,7 @@ public class DialogueManager_Test1 : MonoBehaviour
     {
         if (currentStory == null || string.IsNullOrEmpty(knotName)) return;
 
+        waitingForChatToFinish = false;
         try
         {
             currentStory.ChoosePathString(knotName);
@@ -583,11 +648,19 @@ public class DialogueManager_Test1 : MonoBehaviour
         }
 
         currentStory = new Ink.Runtime.Story(selectedInk.text);
+        
+        // Update Story Name
+        CurrentStoryName = ParseStoryName(selectedInk.name);
+        Debug.Log("Current Story: " + CurrentStoryName);
+
         EnsureOpen();
 
         stateHistory.Clear();
         isRestoringFromHistory = false;
         UpdateBackButtonVisibility();
+
+        CurrentStoryBaseName = inkName;
+        waitingForChatToFinish = false;
 
         if (!string.IsNullOrEmpty(knotName))
         {

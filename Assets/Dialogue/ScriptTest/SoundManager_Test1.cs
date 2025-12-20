@@ -60,7 +60,7 @@ public class SoundManager_Test1 : MonoBehaviour
             voDict[clip.name] = clip.clip;
     }
 
-    public void HandleSoundTag(string tag)
+    public void HandleSoundTag(string tag, string currentStoryName)
     {
         if (tag.StartsWith("play_bgm:"))
         {
@@ -79,13 +79,19 @@ public class SoundManager_Test1 : MonoBehaviour
         if (tag.StartsWith("VOICE:"))
         {
             string name = tag.Substring("VOICE:".Length).Trim();
-            PlayVoiceClipByName(name);
+            PlayVoiceClipByName(name, currentStoryName); // MODIFIED CALL
         }
     }
 
     private void PlayBGM(string name)
     {
-        if (bgmDict.TryGetValue(name, out AudioClip clip))
+        AudioClip clip = null;
+        if (!bgmDict.TryGetValue(name, out clip))
+        {
+            clip = Resources.Load<AudioClip>("Sounds/BGM/" + name);
+        }
+
+        if (clip != null)
         {
             if (bgmPlayer.clip != clip)
             {
@@ -95,7 +101,7 @@ public class SoundManager_Test1 : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("❌ ไม่พบ BGM: " + name);
+            Debug.LogWarning("❌ ไม่พบ BGM: " + name + " (Checked Dictionary and Resources/Sounds/BGM/)");
         }
     }
 
@@ -106,30 +112,96 @@ public class SoundManager_Test1 : MonoBehaviour
 
     public void PlaySFX(string name)
     {
-        if (sfxDict.TryGetValue(name, out AudioClip clip))
+        AudioClip clip = null;
+        if (!sfxDict.TryGetValue(name, out clip))
+        {
+            clip = Resources.Load<AudioClip>("Sounds/SFX/" + name);
+        }
+
+        if (clip != null)
         {
             sfxPlayer.PlayOneShot(clip);
         }
         else
         {
-            Debug.LogWarning("❌ ไม่พบ SFX: " + name);
+            Debug.LogWarning("❌ ไม่พบ SFX: " + name + " (Checked Dictionary and Resources/Sounds/SFX/)");
         }
     }
-    public void PlayVoiceClipByName(string name)
+    public void PlayVoiceClipByName(string fullTagName, string currentStoryName)
     {
-        if (voDict.TryGetValue(name, out AudioClip clip))
+        AudioClip clip = null;
+        
+        // 1. Try Dictionary (Manual List)
+        if (voDict.TryGetValue(fullTagName, out clip))
         {
-            // ถ้า VO Player กำลังเล่นอยู่ ให้หยุดก่อน (ป้องกันเสียงซ้อนแบบไม่ตั้งใจ)
+            // Found in manual list
+        }
+        else
+        {
+            // 2. Advanced Resources Load
+            // Tag format: "Type-ID" e.g. "บรรยาย-0"
+            string[] parts = fullTagName.Split('-');
+            if (parts.Length >= 2)
+            {
+                string type = parts[0]; // "บรรยาย"
+                string id = parts[1];   // "0"
+                
+                // Use passed currentStoryName (e.g. "Story1")
+                string storyFolder = currentStoryName;
+                if (string.IsNullOrEmpty(storyFolder)) storyFolder = "Story1";
+
+                // Map Type to Folder Name (Thai Structure)
+                string folderType = "";
+                if (type == "บรรยาย") folderType = "เสียงบรรยาย";
+                else if (type == "พากย์") folderType = "เสียงพากย์";
+                else if (type.StartsWith("จบ")) folderType = "Ending" + type.Substring(2); // จบ1 -> Ending1
+
+                if (!string.IsNullOrEmpty(folderType))
+                {
+                    // Path: sounds/Story1/เสียงบรรยาย story1/
+                    string storySuffix = storyFolder.ToLower();
+                    string path = $"sounds/{storyFolder}/{folderType} {storySuffix}/";
+                    
+                    // Load all clips in folder to find matching ID prefix
+                    AudioClip[] allClips = Resources.LoadAll<AudioClip>(path);
+                    
+                    // Find clip starting with "ID-"
+                    foreach (var c in allClips)
+                    {
+                        if (c.name.StartsWith(id + "-"))
+                        {
+                            clip = c;
+                            break;
+                        }
+                    }
+
+                    if (clip == null)
+                    {
+                         Debug.LogWarning($"❌ Search failed in: {path} for ID: {id}-");
+                    }
+                }
+            }
+            
+            // 3. Fallback to simple path
+            if (clip == null)
+            {
+                 clip = Resources.Load<AudioClip>("Sounds/VO/" + fullTagName);
+            }
+        }
+
+        if (clip != null)
+        {
             if (voPlayer.isPlaying)
             {
                 voPlayer.Stop();
             }
             voPlayer.clip = clip;
             voPlayer.Play();
+            Debug.Log($"✅ เล่นเสียงพากย์: {clip.name}");
         }
         else
         {
-            Debug.LogWarning("❌ ไม่พบ Voice Clip: " + name);
+            Debug.LogWarning($"❌ ไม่พบ Voice Clip: {fullTagName}");
         }
     }
     public void RegisterExternalAudio(AudioSource source, SoundType type)

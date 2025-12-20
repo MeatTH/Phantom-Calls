@@ -27,7 +27,7 @@ public class AudioManager : MonoBehaviour
         audioSource.clip = menuMusic;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
-        audioSource.volume = 0.5f;
+        audioSource.volume = PlayerPrefs.GetFloat("BGMVolume", 0.5f);
         audioSource.Play();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -40,12 +40,31 @@ public class AudioManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // 1. เช็คว่า Scene นี้ต้องหยุดเพลงหรือไม่
+        bool shouldStop = false;
         foreach (string sceneName in scenesToStopMusic)
         {
             if (scene.name == sceneName)
             {
-                StopMusic();
+                shouldStop = true;
                 break;
+            }
+        }
+
+        // 2. สั่งการทำงาน
+        if (shouldStop)
+        {
+            // ถ้าอยู่ในรายชื่อ Scene ที่ต้องหยุด -> หยุดเพลง
+            StopMusic();
+        }
+        else
+        {
+            // ✅ ถ้าไม่อยู่ในรายชื่อ (เช่น กลับมา Main Menu) -> ให้เล่นเพลง
+            // เช็คก่อนว่าเพลงเล่นอยู่ไหม เพื่อกันเสียงสะดุดถ้ามันเล่นอยู่แล้ว
+            if (audioSource != null && !audioSource.isPlaying)
+            {
+                audioSource.clip = menuMusic; // ใส่คลิปเพลงเมนู
+                audioSource.Play();           // สั่งเล่น
             }
         }
     }
@@ -65,6 +84,14 @@ public class AudioManager : MonoBehaviour
             audioSource.Stop();
             audioSource.clip = newClip;
             audioSource.Play();
+        }
+    }
+
+    public void SetVolume(float volume)
+    {
+        if (audioSource != null)
+        {
+            audioSource.volume = volume;
         }
     }
 }

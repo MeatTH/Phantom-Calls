@@ -12,6 +12,10 @@ public class ChatFlowController : MonoBehaviour
     private bool panelWasActive = false;
     private bool isPaused = false;
 
+    [Header("bool สำหรับปิด/เปิด")]
+    public int isChatPanelOpen = 0;
+    private int INTisChatPanelOpen = 0;
+
     [System.Serializable]
     public class OnSpawnTrigger
     {
@@ -455,6 +459,7 @@ public class ChatFlowController : MonoBehaviour
         }
 
         StartCoroutine(CheckSpawnTriggers(prefab));
+        INTisChatPanelOpen++;
     }
 
 
@@ -672,7 +677,7 @@ public class ChatFlowController : MonoBehaviour
             inputDock.anchoredPosition = dockPos;
 
             // ขยับ ScrollView ตามด้วยระยะเท่ากัน
-            if (hasScrollView)
+            if (hasScrollView && INTisChatPanelOpen > isChatPanelOpen)
             {
                 Vector2 scrollPos = Vector2.LerpUnclamped(scrollStart, scrollTarget, k);
                 inputDock_ScrollView.anchoredPosition = scrollPos;
@@ -684,7 +689,7 @@ public class ChatFlowController : MonoBehaviour
         // จบแอนิเมชัน → เซ็ตให้ตรงเป๊ะ
         inputDock.anchoredPosition = targetPos;
 
-        if (hasScrollView)
+        if (hasScrollView && INTisChatPanelOpen > isChatPanelOpen)
             inputDock_ScrollView.anchoredPosition = scrollTarget;
     }
 

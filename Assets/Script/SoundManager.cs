@@ -34,12 +34,60 @@ public class SoundManager : MonoBehaviour
         LoadAndConnectVolume(voVolumeSlider, "VOVolume", 1.0f, OnVOVolumeChanged);
 
         // ซ่อน Panel ตอนเริ่ม
-        soundPanel.SetActive(false);
+        if (soundPanel == null)
+        {
+            // พยายามหาจาก Tag หรือ Name (แก้ปัญหา Reference หลุด)
+            soundPanel = GameObject.Find("Sound Panel"); 
+            if (soundPanel == null) 
+            {
+               // ลองหาแบบรวมถึงตัวที่ปิดอยู่ (Note: Find ธรรมดาหาตัวปิดไม่เจอ)
+               var allPanels = Resources.FindObjectsOfTypeAll<GameObject>();
+               foreach(var p in allPanels) {
+                   if(p.name == "Sound Panel" && p.scene.IsValid()) {
+                       soundPanel = p;
+                       break;
+                   }
+               }
+            }
+        }
+
+        if (soundPanel != null)
+        {
+            soundPanel.SetActive(false);
+            Debug.Log("[SoundManager] Start: SoundPanel assigned and hidden.");
+        }
+        else
+        {
+            Debug.LogError("[SoundManager] Start: SoundPanel is MISSING! Please assign it in Inspector or ensure name is 'Sound Panel'");
+        }
     }
 
     public void ToggleSoundPanel()
     {
-        soundPanel.SetActive(!soundPanel.activeSelf);
+        Debug.Log("[SoundManager] ToggleSoundPanel Called.");
+        
+        // กันเหนียว: ถ้าตอนแรกหาไม่เจอ ลองหาใหม่อีกทีตอนกด
+        if (soundPanel == null)
+        {
+             var allPanels = Resources.FindObjectsOfTypeAll<GameObject>();
+             foreach(var p in allPanels) {
+                 if(p.name == "Sound Panel" && p.scene.IsValid()) {
+                     soundPanel = p;
+                     break;
+                 }
+             }
+        }
+
+        if (soundPanel != null)
+        {
+            bool isActive = !soundPanel.activeSelf;
+            soundPanel.SetActive(isActive);
+            Debug.Log($"[SoundManager] SoundPanel Active set to: {isActive}");
+        }
+        else
+        {
+            Debug.LogError("[SoundManager] Cannot toggle: SoundPanel is NULL or Destroyed!");
+        }
     }
 
     /*public void OnVolumeChanged(float value)
@@ -66,6 +114,11 @@ public class SoundManager : MonoBehaviour
 
     public void OnBGMVolumeChanged(float value)
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.SetVolume(value);
+        }
+
         if (SoundManager_Test1.instance != null)
             SoundManager_Test1.instance.SetVolume(SoundManager_Test1.SoundType.BGM, value);
         PlayerPrefs.SetFloat("BGMVolume", value);

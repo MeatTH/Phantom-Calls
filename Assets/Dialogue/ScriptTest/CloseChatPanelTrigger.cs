@@ -1,21 +1,31 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CloseChatPanelTrigger : MonoBehaviour, IPointerClickHandler
 {
-    [Header("Chat Panel ∑’ËµÈÕß°“√ª‘¥")]
+    [Header("Sound Settings")]
+    [Tooltip("‡∏ä‡∏∑‡πà‡∏≠‡πÑ‡∏ü‡∏•‡πå‡πÄ‡∏™‡∏µ‡∏¢‡∏á SFX ‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡πÄ‡∏•‡πà‡∏ô‡πÄ‡∏°‡∏∑‡πà‡∏≠‡∏Å‡∏î‡∏õ‡∏∏‡πà‡∏°")]
+    public string clickSoundName = "ui_click"; // ‡∏ï‡∏±‡πâ‡∏á‡∏Ñ‡πà‡∏≤‡∏ä‡∏∑‡πà‡∏≠ default ‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡πÉ‡∏ô Inspector
+
+    [Header("Chat Panel ‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏õ‡∏¥‡∏î")]
     public GameObject chatPanelToClose;
 
-    [Header("°“√°√–‚¥¥ Ink (Load New Ink Story À√◊Õ Jump Knot)")]
-    [Tooltip("∂È“‡«Èπ«Ë“ß Ink Name ®– Jump ‰ª Knot „π Story ‡¥‘¡")]
+    [Header("‡∏Å‡∏≤‡∏£‡∏Å‡∏£‡∏∞‡πÇ‡∏î‡∏î Ink (Load New Ink Story ‡∏´‡∏£‡∏∑‡∏≠ Jump Knot)")]
+    [Tooltip("‡∏ñ‡πâ‡∏≤‡πÄ‡∏ß‡πâ‡∏ô‡∏ß‡πà‡∏≤‡∏á Ink Name ‡∏à‡∏∞ Jump ‡πÑ‡∏õ Knot ‡πÉ‡∏ô Story ‡πÄ‡∏î‡∏¥‡∏°")]
     public string inkNameToLoad = "";
-    [Tooltip("™◊ËÕ Knot À√◊Õ Stitch ∑’ËµÈÕß°“√ Jump ‰ª")]
+    [Tooltip("‡∏ä‡∏∑‡πà‡∏≠ Knot ‡∏´‡∏£‡∏∑‡∏≠ Stitch ‡∏ó‡∏µ‡πà‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£ Jump ‡πÑ‡∏õ")]
     public string jumpToKnot = "";
 
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 1. ª‘¥ Chat Panel
+        // ‚úÖ 1. ‡πÄ‡∏•‡πà‡∏ô‡πÄ‡∏™‡∏µ‡∏¢‡∏á‡∏Å‡πà‡∏≠‡∏ô (‡πÄ‡∏£‡∏µ‡∏¢‡∏Å‡∏ú‡πà‡∏≤‡∏ô SoundManager)
+        if (!string.IsNullOrEmpty(clickSoundName) && SoundManager_Test1.instance != null)
+        {
+            SoundManager_Test1.instance.PlaySFX(clickSoundName);
+        }
+
+        // 2. ‡∏õ‡∏¥‡∏î Chat Panel
         if (chatPanelToClose != null)
         {
             chatPanelToClose.SetActive(false);
@@ -24,41 +34,35 @@ public class CloseChatPanelTrigger : MonoBehaviour, IPointerClickHandler
         var mgr = DialogueManager_Test1.GetInstance();
         if (mgr == null) return;
 
-        // 2.  —Ëß„ÀÈ Ink Story ¥”‡π‘π°“√µËÕ/°√–‚¥¥ Knot
+        // 3. ‡∏™‡∏±‡πà‡∏á‡πÉ‡∏´‡πâ Ink Story ‡∏î‡∏≥‡πÄ‡∏ô‡∏¥‡∏ô‡∏Å‡∏≤‡∏£‡∏ï‡πà‡∏≠/‡∏Å‡∏£‡∏∞‡πÇ‡∏î‡∏î Knot
         bool willJump = !string.IsNullOrEmpty(jumpToKnot) || !string.IsNullOrEmpty(inkNameToLoad);
 
         if (willJump)
         {
-            // „™Èø—ß°Ï™—π LoadNewInkAndJump ‡æ◊ËÕ®—¥°“√∑—Èß°“√‚À≈¥ Ink „À¡Ë·≈–°“√ Jump Knot
+            // ‡πÉ‡∏ä‡πâ‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡∏ô LoadNewInkAndJump ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡∏à‡∏±‡∏î‡∏Å‡∏≤‡∏£‡∏ó‡∏±‡πâ‡∏á‡∏Å‡∏≤‡∏£‡πÇ‡∏´‡∏•‡∏î Ink ‡πÉ‡∏´‡∏°‡πà‡πÅ‡∏•‡∏∞‡∏Å‡∏≤‡∏£ Jump Knot
             if (!string.IsNullOrEmpty(inkNameToLoad))
             {
-                // ∂È“¡’™◊ËÕ Ink „À¡Ë: ‚À≈¥ Ink „À¡Ë·≈– Jump (∂È“¡’ Knot)
+                // ‡∏ñ‡πâ‡∏≤‡∏°‡∏µ‡∏ä‡∏∑‡πà‡∏≠ Ink ‡πÉ‡∏´‡∏°‡πà: ‡πÇ‡∏´‡∏•‡∏î Ink ‡πÉ‡∏´‡∏°‡πà‡πÅ‡∏•‡∏∞ Jump (‡∏ñ‡πâ‡∏≤‡∏°‡∏µ Knot)
                 mgr.LoadNewInkAndJump(inkNameToLoad, jumpToKnot);
             }
             else
             {
-                // ∂È“‰¡Ë¡’™◊ËÕ Ink „À¡Ë: Jump Knot „π Story ‡¥‘¡
-                mgr.EnsureOpen(); // ∑”„ÀÈ Dialogue Panel ‡ª‘¥‡ ¡Õ‡º◊ËÕ®”‡ªÁπ
+                // ‡∏ñ‡πâ‡∏≤‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏ä‡∏∑‡πà‡∏≠ Ink ‡πÉ‡∏´‡∏°‡πà: Jump Knot ‡πÉ‡∏ô Story ‡πÄ‡∏î‡∏¥‡∏°
+                mgr.EnsureOpen(); // ‡∏ó‡∏≥‡πÉ‡∏´‡πâ Dialogue Panel ‡πÄ‡∏õ‡∏¥‡∏î‡πÄ‡∏™‡∏°‡∏≠‡πÄ‡∏ú‡∏∑‡πà‡∏≠‡∏à‡∏≥‡πÄ‡∏õ‡πá‡∏ô
                 mgr.JumpToKnot(jumpToKnot);
             }
         }
         else
         {
-            // ∂È“‰¡Ë¡’°“√√–∫ÿ Knot/Story „ÀÈ®∫ Chat µ“¡ª°µ‘ (Continue Story)
+            // ‡∏ñ‡πâ‡∏≤‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏Å‡∏≤‡∏£‡∏£‡∏∞‡∏ö‡∏∏ Knot/Story ‡πÉ‡∏´‡πâ‡∏à‡∏ö Chat ‡∏ï‡∏≤‡∏°‡∏õ‡∏Å‡∏ï‡∏¥ (Continue Story)
             mgr.OnChatFinished();
         }
 
-        // ª‘¥ ∂“π–√Õ Chat ®∫¢Õß ChatFlowController
-        // (∂÷ß·¡È®–ª‘¥ Panel ·≈È«°Á§«√ —Ëß„ÀÈ®∫ ∂“π–√Õ‰«È°ËÕπ)
+        // ‡∏õ‡∏¥‡∏î‡∏™‡∏ñ‡∏≤‡∏ô‡∏∞‡∏£‡∏≠ Chat ‡∏à‡∏ö‡∏Ç‡∏≠‡∏á ChatFlowController
         var chatFlow = chatPanelToClose.GetComponent<ChatFlowController>();
         if (chatFlow != null)
         {
-            //  ¡¡µ‘«Ë“ ChatFlowController ¡’ø—ß°Ï™—π ”À√—∫ reset  ∂“π–√Õ (·¡È®–ª‘¥ Panel ‰ª·≈È«)
-            // ·µË‡π◊ËÕß®“°‡√“‰¡Ë√ŸÈ«Ë“ ChatFlowController ‡°Á∫ reference ¢Õßµ—«‡Õß„π DialogueManager À√◊Õ‰¡Ë
-            // ‡√“®–Õ“»—¬°“√ —Ëß OnChatFinished() ∑’Ë‡√’¬°‚¥¬µ√ß„π°√≥’‰¡Ë¡’ Jump ·∑π
-
-            // „π°√≥’∑’Ë¡’°“√ Jump (willJump = true) ‡√“®–∂◊Õ«Ë“ Ink ‰¥È∂Ÿ°§«∫§ÿ¡°“√‰À≈·≈È« 
-            // ®÷ß‰¡Ë®”‡ªÁπµÈÕß‡√’¬° OnChatFinished()
+            // Logic ‡πÄ‡∏û‡∏¥‡πà‡∏°‡πÄ‡∏ï‡∏¥‡∏°‡∏ñ‡πâ‡∏≤‡∏à‡∏≥‡πÄ‡∏õ‡πá‡∏ô
         }
     }
 }
