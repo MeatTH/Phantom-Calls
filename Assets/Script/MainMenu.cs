@@ -47,25 +47,6 @@ public class MainMenu : MonoBehaviour
     public void OnBackToMainButtonClicked()
     {
         PlayClickSound();
-
-        // 1. ทำลาย DialogueManager เพื่อล้างค่า Ink Story และ History ทั้งหมด
-        if (DialogueManager_Test1.GetInstance() != null)
-        {
-            // ต้องทำลาย GameObject เพื่อให้ Instance หายไป 
-            // พอเริ่มเกมใหม่ ระบบจะสร้าง DialogueManager ตัวใหม่ที่สดใสกว่าเดิม
-            Destroy(DialogueManager_Test1.GetInstance().gameObject);
-        }
-
-        // 2. (ทางเลือก) ถ้าต้องการรีเซ็ตเสียงด้วย (เช่น หยุดเพลง BGM เก่า) ให้เอา Comment ออก
-        // แต่ระวัง! ถ้าทำลาย SoundManager เสียงกดปุ่ม (Click) อาจจะขาดหายไปกลางคันได้
-        /*
-        if (SoundManager_Test1.instance != null)
-        {
-            Destroy(SoundManager_Test1.instance.gameObject);
-        }
-        */
-
-        // 3. โหลดฉากเมนูหลัก
         SceneManager.LoadScene("Mainmenu");
     }
 }
